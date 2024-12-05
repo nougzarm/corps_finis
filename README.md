@@ -1,4 +1,4 @@
-# corps-finis
+# corps_finis
 
   Un corps fini, souvent noté F_q (où q désigne son nombre d'éléments) est un anneau dont tous les éléments, sauf 0 sont inversibles pour la multiplication. N'importe quel corps de cardinal q peut être désigné par F_q sans ambiguité puisqu'un tel corps est unique à isomorphisme près. Il se trouve que q est forcément une puissance d'un nombre premier, on se donnera donc le premier p et le nombre naturel e tels que : q = p^e. À l'inverse, pour toute telle paire (p,e), il existe un corps fini de cardinal p^e.
 
