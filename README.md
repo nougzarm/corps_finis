@@ -1,4 +1,4 @@
-# Corps finis - Définition, rappels 
+# Définition, rappels 
 
   Un corps fini, souvent noté F_q (où q désigne son nombre d'éléments) est un anneau dont tous les éléments non nuls sont inversibles pour la multiplication. Tout corps à q élément peut être noté F_q sans ambiguité puisqu'il est unique à isomorphisme près. Etant donné un corps fini F_q, on peut montrer que q est forcément une puissance d'un nombre premier p. Il existe donc un entier naturel e tel que : q = p^e. Réciproquement, pour toute telle paire (p,e), il existe un corps fini de cardinal p^e.
 
