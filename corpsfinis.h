@@ -17,12 +17,12 @@ typedef struct{
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
-int max(int a, int b);
-int min(int a, int b);
-int modulo(int a, int b);
-int puissance(int a, int e);
-int puissance_modulo(int m, int e, int p);
-int inverse_mod(int a, int p);
+int max(int a, int b);          // max(a, b)
+int min(int a, int b);          // min(a, b)
+int modulo(int a, int b);       // a mod b
+int puissance(int a, int e);    // a^e
+int puissance_modulo(int m, int e, int p);  // m^e mod p
+int inverse_mod(int a, int p);  
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
