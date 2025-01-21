@@ -13,7 +13,6 @@ Structures utilisées:
     polynome : permet de définir un polynome (à coefficients entiers)
     corps_fini : permet de définir un corps fini F_q = (Z/pZ[X])/(f) où p = corps_fini.car et f = corps_fini.relation
         f doit donc être irréductible. 
-        Remarque : pour définir un corps Z/pZ, poser corps_fini.relation = X
     element : permet de définir un élément d'un corps fini via sa forme polynomiale element.representation, dans
         un corps donné element.corps
  */
