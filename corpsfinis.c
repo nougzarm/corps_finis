@@ -154,7 +154,7 @@ void initp_polynome(polynome* P, int* coeff, int degre){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
-int afficherp(polynome* P){
+int cf_afficherp(polynome* P){
     if (P->degre == -1){
         printf("0");
         return 0;
@@ -182,7 +182,7 @@ int afficherp(polynome* P){
     }
 }
 
-void viderp(polynome* P){
+void cf_viderp(polynome* P){
     if (P->coeff != NULL){
         free(P->coeff);
         P->degre = -1;
@@ -317,6 +317,20 @@ static void flip(polynome* r0, polynome* r1, polynome* r2){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
+int cf_comparp(polynome* P, polynome* A){
+    if (P->degre != A->degre){
+        return 0;
+    }
+    else {
+        for (int i = 0; i <= P->degre; i++){
+            if (P->coeff[i] != A->coeff[i]){
+                return 0;
+            }
+        }
+        return 1;
+    }
+}
+
 int cf_cdp(polynome* P){
     if (P->degre == -1){
         return 0;
@@ -326,7 +340,22 @@ int cf_cdp(polynome* P){
     }
 }
 
-void cf_mulp_int(polynome* P, int n){
+void cf_mulp_int(polynome* P, polynome* A, int n){
+    initp_polynull(P);
+    if (n == 0 || A->degre == -1){
+        return;
+    }
+    else {
+        P->degre = A->degre;
+        P->coeff = calloc(P->degre + 1, sizeof(int));
+        for (int i = 0; i <= A->degre; i++){
+            P->coeff[i] = n * A->coeff[i];
+        }
+        return;
+    }
+}
+
+void cf_mulp_int_tr(polynome* P, int n){
     if (P->degre == -1)
         return ; // P est nul
     if (n == 0){

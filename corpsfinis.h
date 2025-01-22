@@ -86,7 +86,6 @@ int afficherp(polynome* P);
 /*  Libération de la mémoire occupée par un polynome P (libére la liste des coefficients)  */
 void viderp(polynome* P);
 
-
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
     |                                        4. OUTILS POUR LES POLYNOMES                                            |
@@ -108,14 +107,23 @@ polynome demi_surjection(polynome*, int p, polynome* f);           // Surjection
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
  */
+/*  Compare deux polynomes P et A (leurs coefficients)  */
+int cf_comparp(polynome* P, polynome* A);
+
 /*  Retourne le coefficient dominant d'un polynome P    */
 int cf_cdp(polynome* P);
 
-/*  Multiplie un polynome P par un scalaire n    */
-void cf_mulp_int(polynome* P, int n);
+/*  Stocker le produit nA dans P (pour le cas A=P voir cf_mulp_int_tr)    */
+void cf_mulp_int(polynome* P, polynome* A, int n);
 
-/*  Stocker le polynome somme A+B dans P    */
+/*  Tranformation P <- nP    */
+void cf_mulp_int_tr(polynome* P, int n);
+
+/*  Stocker le polynome somme A+B dans P (pour le cas A=P voir cf_addp_tr)    */
 int cf_addp(polynome* P, polynome* A, polynome* B);
+
+/*  Transforamtion P <- P*A     */
+int cf_addp_tr(polynome* P, polynome* A);
 
 /*  Stocker le polynome opposé -A dans P    */
 int cf_opposep(polynome* P, polynome* A);
