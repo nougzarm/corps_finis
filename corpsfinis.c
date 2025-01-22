@@ -318,7 +318,7 @@ int cf_cdp(polynome* P){
 void cf_mulp_int(polynome* P, polynome* A, int n){
     initp_polynull(P);
     if (n == 0 || A->degre == -1){
-        return;
+        return 0;
     }
     else {
         P->degre = A->degre;
@@ -326,7 +326,7 @@ void cf_mulp_int(polynome* P, polynome* A, int n){
         for (int i = 0; i <= A->degre; i++){
             P->coeff[i] = n * A->coeff[i];
         }
-        return;
+        return 0;
     }
 }
 
@@ -335,13 +335,13 @@ void cf_mulp_int_tr(polynome* P, int n){
         return ; // P est nul
     if (n == 0){
         initp_polynull(P);
-        return;
+        return 0;
     }
     else {
         for (int i = 0; i<= P->degre; i++){
             P->coeff[i] = n * P->coeff[i];
         }
-        return;
+        return 0;
     }
 }
 

@@ -113,10 +113,10 @@ int cf_comparp(polynome* P, polynome* A);
 int cf_cdp(polynome* P);
 
 /*  Stocker le produit nA dans P (pour le cas A=P voir cf_mulp_int_tr)    */
-void cf_mulp_int(polynome* P, polynome* A, int n);
+int cf_mulp_int(polynome* P, polynome* A, int n);
 
 /*  Tranformation P <- nP    */
-void cf_mulp_int_tr(polynome* P, int n);
+int cf_mulp_int_tr(polynome* P, int n);
 
 /*  Stocker le polynome somme A+B dans P (pour le cas A=P voir cf_addp_tr)    */
 int cf_addp(polynome* P, polynome* A, polynome* B);
@@ -158,10 +158,18 @@ int cf_redp_int_tr(polynome* P, int p);
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
  */
-polynome addition_mod(polynome*, polynome*, int p);                    // Addition dans F_p[X]
-polynome soustraction_mod(polynome*, polynome*, int p);                // Soustraction dans F_p[X]
-polynome multiplication_mod(polynome*, polynome*, int p);              // Multiplication dans F_p[X]
-polynome puissance_mod(polynome*, int exposant, int p);                // Puissance dans F_p[X]
+/*  Stocker la somme A+B mod p dans P   */
+int cf_addp_mod(polynome* P, polynome* A, polynome* B, int p);
+
+/*  Stocker la différence A-B mod p dans P   */
+int cf_subp_mod(polynome* P, polynome* A, polynome* B, int p);
+
+/*  Stocker le produit A*B mod p dans P   */
+int multiplication_mod(polynome* P, polynome* A, polynome* B, int p);
+
+/*  Stocker la puissance A^exp mod p dans P   */
+int puissance_mod(polynome*P, polynome* A, int exp, int p);
+
 polynome division_euclid(polynome*, polynome*, int p, int i);          // Div. euclidienne dans F_p[X] (i=0: le quotient, i=1: le reste)
 polynome algo_euclide(polynome*, polynome*, int p);                    // PGCD dans F_p[X] (Algorithme d'Euclide)
 polynome algo_euclide_etendu(polynome* P, polynome* Q, int p, int i);  // Euclide étendu (si uP+vQ=pgcd alors i=0: v, sinon: u)
