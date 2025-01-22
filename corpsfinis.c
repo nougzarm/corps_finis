@@ -590,22 +590,56 @@ int cf_redp_int_tr(polynome* P, int p){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
-polynome addition_mod(polynome* A, polynome* B, int p){
-    polynome S = addition(A, B);
-    cf_redp_int_tr(&S, p);
-    return S;
+int cf_addp_mod(polynome* P, polynome* A, polynome* B, int p){
+    int result = cf_addp(P, A, B);
+    cf_redp_int_tr(P, p);
+    return result;
 };
 
-polynome soustraction_mod(polynome* A, polynome* B, int p){
-    polynome S = soustraction(A, B);
-    cf_redp_int_tr(&S, p);
-    return S;
+int cf_addp_mod_tr(polynome* P, polynome* A, int p){
+    int result = cf_addp_tr(P, A);
+    cf_redp_int_tr(P, p);
+    return result;
 };
 
-polynome multiplication_mod(polynome* A, polynome* B, int p){
-    polynome P = multiplication(A, B);
-    cf_redp_int_tr(&P, p);
-    return P;
+int cf_subp_mod(polynome* P, polynome* A, polynome* B, int p){
+    int result = cf_subp(P, A, B);
+    cf_redp_int_tr(P, p);
+    return result;
+};
+
+int cf_subp_mod_tr(polynome* P, polynome* A, int p){
+    int result = cf_subp_tr(P, A);
+    cf_redp_int_tr(P, p);
+    return result;
+};
+
+int cf_mulp_mod(polynome* P, polynome* A, polynome* B, int p){
+    int result = cf_mulp(P, A, B);
+    cf_redp_int_tr(P, p);
+    return result;
+}
+
+int cf_mulp_mod_tr(polynome* P, polynome* A, int p){
+    int result = cf_mulp_tr(P, A);
+    cf_redp_int_tr(P, p);
+    return result;
+}
+
+int cf_puissancep_mod(polynome* P, polynome* A, int exp, int p){
+    if(exp == 0){
+        initp_monome(P, 1, 0);
+        return 0;
+    }
+    initp_copie(P, A);
+    if(P->degre == -1){
+        return 0;
+    }
+    int result = 0;
+    for (int i = 2; i<=exp; i++){
+        result = cf_mulp_mod_tr(P, A, p);
+    }
+    return result;
 }
 
 polynome puissance_mod(polynome* A, int exposant, int p){

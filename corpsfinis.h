@@ -161,14 +161,23 @@ int cf_redp_int_tr(polynome* P, int p);
 /*  Stocker la somme A+B mod p dans P   */
 int cf_addp_mod(polynome* P, polynome* A, polynome* B, int p);
 
+/*  Transformation P <- P+A mod p   */
+int cf_addp_mod_tr(polynome* P, polynome* A, int p);
+
 /*  Stocker la différence A-B mod p dans P   */
 int cf_subp_mod(polynome* P, polynome* A, polynome* B, int p);
 
+/*  Transformation P <- P-A mod p   */
+int cf_subp_mod_tr(polynome* P, polynome* A, int p);
+
 /*  Stocker le produit A*B mod p dans P   */
-int multiplication_mod(polynome* P, polynome* A, polynome* B, int p);
+int cf_mulp_mod(polynome* P, polynome* A, polynome* B, int p);
+
+/*  Transformation P <- P*A mod p */
+int cf_mulp_mod_tr(polynome* P, polynome* A, int p);
 
 /*  Stocker la puissance A^exp mod p dans P   */
-int puissance_mod(polynome*P, polynome* A, int exp, int p);
+int cf_puissancep_mod(polynome*P, polynome* A, int exp, int p);
 
 polynome division_euclid(polynome*, polynome*, int p, int i);          // Div. euclidienne dans F_p[X] (i=0: le quotient, i=1: le reste)
 polynome algo_euclide(polynome*, polynome*, int p);                    // PGCD dans F_p[X] (Algorithme d'Euclide)
