@@ -8,26 +8,24 @@
     |----------------------------------------------------------------------------------------------------------------|
     |                                                 0. STRUCTURES                                                  |
     |----------------------------------------------------------------------------------------------------------------|
-    |----------------------------------------------------------------------------------------------------------------|
-Structures utilisées:
-    polynome : permet de définir un polynome (à coefficients entiers)
-    corps_fini : permet de définir un corps fini F_q = (Z/pZ[X])/(f) où p = corps_fini.car et f = corps_fini.relation
-        f doit donc être irréductible. 
-    element : permet de définir un élément d'un corps fini via sa forme polynomiale element.representation, dans
-        un corps donné element.corps
- */
+    |----------------------------------------------------------------------------------------------------------------|  
+*/    
+/*  Structure de polynôme dans Z[X], représenté par ses coefficients ainsi que son degré    */   
 typedef struct{
     int* coeff;
     int degre;
 } polynome;
 
+/*  Structure de corps fini défini via sa caractéristique car = p ainsi qu'un polynome relation = f irréductible 
+    dans F_p[X], afin que F_q = (Z/pZ[X])/(f) soit un corps fini de cardinal q = p^deg(f)    */
 typedef struct{
-    int car; 
-    polynome* relation;
+    int car;
+    polynome relation;
 } corps_fini;
 
+/*  Structure d'élément de F_q, représenté par un polynome de F_p[X] modulo f    */
 typedef struct{
-    polynome* representation;
+    polynome representation;
     corps_fini* corps;
 } element;
 
@@ -50,7 +48,7 @@ int inverse_mod(int a, int p);
     |                                 2. INITIALISATION(/DEFINITION) DE POLYNOMES                                    |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
- */
+*/
 /*  Initialisation d'un polynôme P à 0  */
 void initp_polynull(polynome* P);
 

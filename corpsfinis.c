@@ -134,9 +134,11 @@ void initp_polynome(polynome* P, int* coeff, int degre){
     if(degre < 0){
         return 1;   // Choisir un degré positif (ou utiliser initp_polynull pour degre = -1)
     }
+    // Vider P si il est déjà initialisé
     if(P->coeff != NULL){
         free(P->coeff);
     }
+    // Début de l'initialisation
     P->degre = degre;
     P->coeff = calloc(degre+1, sizeof(int));
     for(int i = 0; i <= degre; i++){
