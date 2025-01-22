@@ -33,7 +33,7 @@ typedef struct{
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
-    |                                                     1. MATHS                                                   |
+    |                                              1. OUTILS MATHS                                                   |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
  */
@@ -42,7 +42,32 @@ int min(int a, int b);          // min(a, b)
 int modulo(int a, int b);       // a mod b
 int puissance(int a, int e);    // a^e
 int puissance_modulo(int m, int e, int p);  // m^e mod p
-int inverse_mod(int a, int p);  
+int inverse_mod(int a, int p);
+
+
+/*  |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|
+    |                                 2. INITIALISATION(/DEFINITION) DE POLYNOMES                                    |
+    |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|
+ */
+/*  Initialisation d'un polynôme P à 0  */
+void initp_polynull(polynome* P);
+
+/*  Initialisation d'un polynôme P à partir de Q   
+    Retourne:   1 si l'initalisation a échoué (Q n'est pas correctement défini)
+                0 si la copie est réussie     */
+int initp_copie(polynome* P);
+
+/*  Initialisation d'un polynome P par le monomme coeff*X^exp
+    Retourne:   1 si l'initalisation a échoué (exp n'est pas positif)
+                0 si l'initialisation   */
+int initp_monome(polynome* P, int coeff, int exp);
+
+/*  Initialisation d'un polynome P à partir d'une liste de coefficients
+    - La liste coefficient contient les coefficients (en commençant par le coefficient du degré constant)
+    - Si degre = -1 alors P est initialisé à 0   */
+void initp_polynome(polynome* P, int* coeff, int degre);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
@@ -61,18 +86,6 @@ polynome difference_etendu(polynome* A, polynome* Q, polynome* B);              
 polynome difference_etendu_mod(polynome* A, polynome* Q, polynome* B, int p);   // retourne A-QB   (dans F_p[X])
 polynome surjection(polynome*, int p, polynome* f);                // Surjection Z[X] ->> F_p[X] ->> F_p[X]/(f)   
 polynome demi_surjection(polynome*, int p, polynome* f);           // Surjection F_p[X] ->> F_p[X]/(f)
-
-
-/*  |----------------------------------------------------------------------------------------------------------------|
-    |----------------------------------------------------------------------------------------------------------------|
-    |                                      3. INITIALISATION DE POLYNOMES                                            |
-    |----------------------------------------------------------------------------------------------------------------|
-    |----------------------------------------------------------------------------------------------------------------|
- */
-polynome polynull();                                    // Renvoie le polynome nul
-polynome copie(polynome* P);                            // Renvoie une copie de P
-polynome monome(int coefficient, int exposant);         // Renvoie le monome de degré et coeff voulu
-polynome polynome_init(int* coefficient, int degre);    // Initialise un polynôme [A programmer]
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|

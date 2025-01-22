@@ -12,7 +12,7 @@
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
-    |                                                     1. MATHS                                                   |   
+    |                                              1. OUTILS MATHS                                                   |   
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
@@ -68,6 +68,83 @@ int inverse_mod(int a, int p){
     v1 = modulo(v1, p);
     return v1;
 }
+
+
+/*  |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|
+    |                                      3. INITIALISATION DE POLYNOMES                                            |   
+    |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|                                                     
+ */
+void initp_polynull(polynome* P){
+    if (P->coeff != NULL){
+        free(P->coeff);
+    }
+    P->coeff = NULL;
+    P->degre = -1;
+    return;
+}
+
+int initp_copie(polynome* P, polynome* Q){
+    // Si P est deja initialisé, on le vide
+    if(P->degre != NULL){
+        free(P->coeff);
+    }
+    if(Q->degre < -1){
+        return 1;   // Q n'est pas correctement défini
+    }
+    else if(Q->degre == -1){
+        init_polynull(P);
+        return 0;   // P <- 0
+    }
+    else{
+        P->degre = Q->degre;
+        P->coeff = calloc(Q->degre+1, sizeof(int));
+        for(int i=0; i < Q->degre+1; i++){
+            P->coeff[i] = Q->coeff[i];
+        }
+        return 0;   // P <- Q
+    }
+}
+
+int initp_monome(polynome* P, int coeff, int exp){
+    if(exp < 0){
+        return 1;   // Choisir un exposant positif
+    }
+    if(P->coeff != NULL){
+        free(P->coeff);
+    }
+    if(coeff == 0){
+        initp_polynull(P);
+        return 0;   // P <- 0
+    }
+    else{
+        P->degre = exp;
+        P->coeff = calloc(exp + 1, sizeof(int));
+        for (int i = 0; i < exp; i++){
+            P.coeff[i] = 0;
+            }
+        P.coeff[exp] = coeff;
+        return 0;   // P <- coeff*X^exp
+    }
+}
+
+// Initialisation d'un polynôme à partir d'une liste contenant les coefficients souhaités
+void initp_polynome(polynome* P, int* coeff, int degre){
+    if(degre < 0){
+        return 1;   // Choisir un degré positif (ou utiliser initp_polynull pour degre = -1)
+    }
+    if(P->coeff != NULL){
+        free(P->coeff);
+    }
+    P->degre = degre;
+    P->coeff = calloc(degre+1, sizeof(int));
+    for(int i = 0; i <= degre; i++){
+        P->coeff[i] = coeff[i];
+    }
+    return 0;   // Initialisation réussie
+}
+
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
@@ -203,64 +280,7 @@ static void flip(polynome* r0, polynome* r1, polynome* r2){
     return;
 }
 
-/*  |----------------------------------------------------------------------------------------------------------------|
-    |----------------------------------------------------------------------------------------------------------------|
-    |                                      3. INITIALISATION DE POLYNOMES                                            |   
-    |----------------------------------------------------------------------------------------------------------------|
-    |----------------------------------------------------------------------------------------------------------------|                                                     
- */
-polynome polynull(){
-    int* coeff = NULL;
-    polynome polynome_nul = {coeff, -1};
-    return polynome_nul;
-}
 
-polynome copie(polynome* P){
-    polynome Q;
-    Q.degre = P->degre;
-    if (Q.degre == -1){
-        Q.coeff = NULL;
-    }
-    else {
-        Q.coeff = calloc(Q.degre + 1, sizeof(int));
-        for(int i = 0; i <= Q.degre; i++) {
-            Q.coeff[i] = P->coeff[i];
-        }
-    }
-    return Q;
-}
-
-polynome monome(int coefficient, int exposant){
-    polynome P;
-    if (coefficient == 0){
-        P = polynull();
-        return P;
-    }
-    else {
-        P.degre = exposant;
-        P.coeff = calloc(exposant + 1, sizeof(int));
-        for (int i = 0; i < exposant; i++) { P.coeff[i] = 0; }
-        P.coeff[exposant] = coefficient;
-        return P;
-    }
-}
-
-// Initialisation d'un polynôme à partir d'une liste contenant les coefficients souhaités
-polynome polynome_init(int* liste, int taille_liste){
-    int* coeff = NULL;
-    polynome nouveau_polynome = {coeff, -1};
-    if(taille_liste < 1){
-        return nouveau_polynome;
-    }
-    else{
-        nouveau_polynome.degre = taille_liste - 1;
-        nouveau_polynome.coeff = calloc(taille_liste, sizeof(int));
-        for(int i = 0; i < taille_liste; i++){
-            nouveau_polynome.coeff[nouveau_polynome.degre - i] = liste[i];
-        }
-        return nouveau_polynome;
-    }
-}
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
