@@ -150,22 +150,69 @@ void initp_polynome(polynome* P, int* coeff, int degre){
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
-    |                                                  2. OUTILS                                                     |   
+    |                                           4. GESTION DE POLYNOMES                                              |   
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
-int conversion_scalaire(polynome* P){
-    if (P->degre == 0){
-        return P->coeff[0];
+int afficherp(polynome* P){
+    if (P->degre == -1){
+        printf("0");
+        return 0;
     }
     else {
+        int coeff = P->coeff[P->degre];     // Coefficient dominant de P
+        // Affichage du monôme dominant
+        if(coeff == 1){
+            printf("X^%d", P->degre);
+        }
+        else{
+            printf("%dX^%d", coeff, P->degre);
+        }
+        // Affichage des autres monômes
+        for (int i = 1; i <= P->degre; i++){
+            coeff = P->coeff[P->degre - i]; 
+            if (coeff != 0 && coeff == 1){
+                printf(" + X^%d", P->degre - i);
+            }
+            else if(coeff != 0 && coeff != 1){
+                printf(" + %dX^%d", coeff, P->degre - i);
+            }
+        }
         return 0;
     }
 }
 
-void scalaire(int n, polynome* P){
+void viderp(polynome* P){
+    if (P->coeff != NULL){
+        free(P->coeff);
+        P->degre = -1;
+        P->coeff = NULL;
+    }
+}
+
+
+/*  |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|
+    |                                        4. OUTILS POUR LES POLYNOMES                                            |   
+    |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|                                                     
+ */
+int coeff_dominantp(polynome* P){
+    if (P->degre == -1){
+        return 0;
+    }
+    else {
+        return P->coeff[P->degre];
+    }
+}
+
+void mulp_scalaire(polynome* P, int n){
     if (P->degre == -1)
+        return ; // P est nul
+    if (n == 0){
+        initp_polynull(P);
         return;
+    }
     else {
         for (int i = 0; i<= P->degre; i++){
             P->coeff[i] = n * P->coeff[i];
@@ -285,47 +332,7 @@ static void flip(polynome* r0, polynome* r1, polynome* r2){
 
 
 
-/*  |----------------------------------------------------------------------------------------------------------------|
-    |----------------------------------------------------------------------------------------------------------------|
-    |                                                   4. GESTION                                                   |   
-    |----------------------------------------------------------------------------------------------------------------|
-    |----------------------------------------------------------------------------------------------------------------|                                                     
- */
-void vider(polynome* P){
-    if (P->coeff != NULL){
-        free(P->coeff);
-        P->degre = -1;
-        P->coeff = NULL;
-    }
-}
 
-void afficher(polynome* P){
-    if (P->degre == -1){
-        printf("0");
-        return;
-    }
-    else {
-        int coeff = P->coeff[P->degre];     // Coefficient dominant de P
-        // Affichage du monôme dominant
-        if(coeff == 1){
-            printf("X^%d", P->degre);
-        }
-        else{
-            printf("%dX^%d", coeff, P->degre);
-        }
-        // Affichage des autres monômes
-        for (int i = 1; i <= P->degre; i++){
-            coeff = P->coeff[P->degre - i]; 
-            if (coeff != 0 && coeff == 1){
-                printf(" + X^%d", P->degre - i);
-            }
-            else if(coeff != 0 && coeff != 1){
-                printf(" + %dX^%d", coeff, P->degre - i);
-            }
-        }
-        return;
-    }
-}
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
