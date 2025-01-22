@@ -682,8 +682,7 @@ int cf_divp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
     }
 }
 
-int cf_pgcdp_mod(polynome* P, polynome* A, polynome* B, int p)
-polynome algo_euclide(polynome* A, polynome* B, int p){
+int cf_pgcdp_mod(polynome* P, polynome* A, polynome* B, int p){
     if (B->degre > A->degre){
         swap(A, B);
     }
