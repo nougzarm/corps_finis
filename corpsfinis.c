@@ -702,6 +702,7 @@ polynome algo_euclide(polynome* A, polynome* B, int p){
     viderp(&r2);
     unitaire(&r1, p);
     cf_initp_copie(P, &r1);
+    viderp(&r1);
     return result;
 }
 
