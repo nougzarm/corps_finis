@@ -198,34 +198,9 @@ void cf_viderp(polynome* P){
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
 
-void modulo_transfo(polynome* P, int p){
-    if ( P->degre == -1 ){
-        return; 
-    }
-    int d = -1;
-    for (int i = P->degre; i >= 0; i--){
-        if ( (P->coeff[i])%p != 0 ){
-            d = i;
-            break;
-        }
-    }
-    if ( d == -1 ){
-        free(P->coeff);
-        P->degre = -1;
-        P->coeff = NULL;
-        return;
-    }
-    P->degre = d;
-    P->coeff = realloc(P->coeff, (d+1)*sizeof(int));
-    for (int i = 0; i <= P->degre; i++){
-        P->coeff[i] = modulo(P->coeff[i], p);
-    }
-    return;
-}
-
 void scalaire_mod(int n, polynome* P, int p){
     scalaire(n, P);
-    modulo_transfo(P, p);
+    cf_redp_int_tr(P, p);
     return;
 }
 
@@ -233,7 +208,7 @@ void unitaire(polynome* P, int p){
     int C = P->coeff[P->degre];     // coeff dominant de P
     int C_inv = inverse_mod(C, p);  // son inverse
     scalaire(C_inv, P);
-    modulo_transfo(P, p);
+    cf_redp_int_tr(P, p);
     return;
 }
 
@@ -254,7 +229,7 @@ polynome difference_etendu_mod(polynome* A, polynome* Q, polynome* B, int p){
     vider(&S);
     S = copie(&S_inter);
     vider(&S_inter);
-    modulo_transfo(&S, p);
+    cf_redp_int_tr(&S, p);
     return S;
 }
 
@@ -277,7 +252,7 @@ static void swap(polynome* P, polynome* Q){
 
 // Surjection Z[X] ->> F_p[X] ->> F_p[X]/(f) 
 polynome surjection(polynome* P, int p, polynome* f){
-    modulo_transfo(P, p);
+    cf_redp_int_tr(P, p);
     polynome P_mod = division_euclid(P, f, p, 1);
     return P_mod;
 }
@@ -617,19 +592,19 @@ int cf_redp_int_tr(polynome* P, int p){
  */
 polynome addition_mod(polynome* A, polynome* B, int p){
     polynome S = addition(A, B);
-    modulo_transfo(&S, p);
+    cf_redp_int_tr(&S, p);
     return S;
 };
 
 polynome soustraction_mod(polynome* A, polynome* B, int p){
     polynome S = soustraction(A, B);
-    modulo_transfo(&S, p);
+    cf_redp_int_tr(&S, p);
     return S;
 };
 
 polynome multiplication_mod(polynome* A, polynome* B, int p){
     polynome P = multiplication(A, B);
-    modulo_transfo(&P, p);
+    cf_redp_int_tr(&P, p);
     return P;
 }
 
@@ -657,14 +632,14 @@ polynome puissance_mod(polynome* A, int exposant, int p){
 }
 
 polynome division_euclid(polynome* A, polynome* B, int p, int i){
-    modulo_transfo(A, p); modulo_transfo(B, p);
+    cf_redp_int_tr(A, p); cf_redp_int_tr(B, p);
     polynome Q, M;
     Q = polynull();
     polynome R = copie(A);
     while ( R.degre >= B->degre ) {
         M = monome( R.coeff[R.degre] * inverse_mod(B->coeff[B->degre], p), R.degre - B->degre );
         ajout(&Q, &M);
-        modulo_transfo(&Q, p);
+        cf_redp_int_tr(&Q, p);
         vider(&M);
         vider(&R);
         R = difference_etendu_mod(A, &Q, B, p);
@@ -722,13 +697,13 @@ polynome algo_euclide_etendu(polynome* P, polynome* Q, int p, int i){
     if ( i == 0 ){
         vider(&v1);
         scalaire(C_inv, &u1);
-        modulo_transfo(&u1, p);
+        cf_redp_int_tr(&u1, p);
         return u1;
     }
     else {
         vider(&u1);
         scalaire(C_inv, &v1);
-        modulo_transfo(&v1, p);
+        cf_redp_int_tr(&v1, p);
         return v1;
     }
 }

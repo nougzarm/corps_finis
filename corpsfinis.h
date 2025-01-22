@@ -94,7 +94,6 @@ void viderp(polynome* P);
  */
 void scalaire_mod(int n, polynome* P, int p);               // P -> nP  (dans F_p[X])
 void scalaire_Fq(int n, polynome* P, int p, polynome* f);   // P -> nP  (dans F_q)
-void modulo_transfo(polynome* P, int p);                    // P -> P [p]
 void unitaire(polynome* P, int p);                          // P [p] -> P/CoeffDom(P) [p]
 polynome difference_etendu(polynome* A, polynome* Q, polynome* B);              // retourne A-QB   (dans Z[X])
 polynome difference_etendu_mod(polynome* A, polynome* Q, polynome* B, int p);   // retourne A-QB   (dans F_p[X])
