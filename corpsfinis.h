@@ -128,17 +128,29 @@ int cf_addp_tr(polynome* P, polynome* A);
 /*  Stocker le polynome opposé -A dans P    */
 int cf_opposep(polynome* P, polynome* A);
 
+/*  Transformation P <- -P    */
+int cf_opposep_tr(polynome* P);
+
 /*  Stocker le polynome différence A+B dans P    */
 int cf_subp(polynome* P, polynome* A, polynome* B);
 
+/*  Transformation P <- P-A    */
+int cf_subp_tr(polynome* P, polynome* A);
+
 /*  Stocker le polynome produit A*B dans P    */
 int cf_mulp(polynome* P, polynome* A, polynome* B);
+
+/*  Transformation P <- P*A    */
+int cf_mulp_tr(polynome* P, polynome* A);
 
 /*  Stocker le polynome A^exp dans P    */
 int cf_puissancep(polynome* P, polynome* A, int exp);
 
 /*  Stocker le polynome A mod p dans P    */
 int cf_redp_int(polynome* P, polynome* A, int p);
+
+/*  Transormation P <- P mod p    */
+int cf_redp_int_tr(polynome* P, int p);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|

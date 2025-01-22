@@ -412,6 +412,60 @@ int cf_addp(polynome* P, polynome* A, polynome* B){
     }
 }
 
+int cf_addp_tr(polynome* P, polynome* A){
+    if (P->degre != A->degre){
+        int degP = max(P->degre, A->degre);
+        int min_ = min(P->degre, A->degre);
+        int* coeffsP = calloc(degP + 1, sizeof(int));
+        for (int i = 0; i <= min_; i++){
+            coeffsP[i] = P->coeff[i] + A->coeff[i];
+        }
+        if (P->degre > A->degre){
+            for (int i = min_ + 1; i <= degP; i++){
+                coeffsP[i] = P->coeff[i];
+            }
+        }
+        else {
+            for (int i = min_ + 1; i <= degP; i++){
+                coeffsP[i] = A->coeff[i];
+            }
+        }
+        free(P->coeff);
+        P->coeff = coeffsP;
+        P->degre = degP;
+        return 0;
+    }
+    else{
+        int degP = -1;
+        for (int i = P->degre; i >= 0; i--){
+            if (P->coeff[i] + A->coeff[i] != 0){
+                degP = i;
+                break;
+            }
+        }
+        if (degP == -1){
+            if(P->coeff != NULL){
+                free(P->coeff);
+            }
+            P->coeff = NULL;
+            P->degre = -1;
+            return 0;
+        }
+        else {
+            int* coeffsP = calloc(degP + 1, sizeof(int));
+            for (int i = 0; i <= degP; i++){
+                coeffsP[i] = P->coeff[i] + A->coeff[i];
+            }
+            if (P->coeff != NULL){
+                free(P->coeff);
+            }
+            P->coeff = coeffsP;
+            P->degre = degP;
+            return 0;
+        }
+    }
+}
+
 int cf_opposep(polynome* P, polynome* A){
     initp_polynull(P);
     if(A->degre == -1){
@@ -425,11 +479,29 @@ int cf_opposep(polynome* P, polynome* A){
     return 0;
 }
 
+int cf_opposep_tr(polynome* P){
+    if (P->degre == -1){
+        return 0;
+    }
+    for (int i = 0; i <= P->degre; i++){
+        P->coeff[i] = - P->coeff[i];
+    }
+    return 0;
+}
+
 int cf_subp(polynome* P, polynome* A, polynome* B){
     initp_polynull(P);
     polynome T;
     cf_opposep(&T, B);
     cf_addp(P, A, &T);
+    vider(&T);
+    return 0;
+}
+
+int cf_subp_tr(polynome* P, polynome* A){
+    polynome T;
+    cf_opposep(&T, A);
+    cf_addp_tr(P, &T);
     vider(&T);
     return 0;
 }
@@ -452,6 +524,20 @@ int cf_mulp(polynome* P, polynome* A, polynome* B){
             }
             P->coeff[k] = C;
         }
+        return 0;
+    }
+}
+
+int cf_mulp_tr(polynome* P, polynome* A){
+    if ( (P->degre == -1) || (A->degre == -1) ){
+        initp_polynull(P);
+        return 0;
+    }
+    else {
+        polynome T;
+        cf_copie(&T, P);
+        cf_mulp(P, &T, A);
+        vider(&T);
         return 0;
     }
 }
@@ -497,6 +583,31 @@ int cf_redp_int(polynome* P, polynome* A, int p){
         return 0;
     }
 }
+
+int cf_redp_int_tr(polynome* P, int p){
+    if (P->degre == -1){
+        return 0; 
+    }
+    int d = -1;
+    for (int i = P->degre; i >= 0; i--){
+        if ( (P->coeff[i])%p != 0 ){
+            d = i;
+            break;
+        }
+    }
+    if ( d == -1 ){
+        initp_polynull(P);
+        return 0;
+    }
+    P->degre = d;
+    P->coeff = realloc(P->coeff, (d+1)*sizeof(int));
+    for (int i = 0; i <= P->degre; i++){
+        P->coeff[i] = modulo(P->coeff[i], p);
+    }
+    return 0;
+}
+
+
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
