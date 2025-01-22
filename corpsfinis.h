@@ -185,9 +185,16 @@ int cf_mulp_mod_tr(polynome* P, polynome* A, int p);
 /*  Stocker la puissance A^exp mod p dans P   */
 int cf_puissancep_mod(polynome*P, polynome* A, int exp, int p);
 
-polynome division_euclid(polynome*, polynome*, int p, int i);          // Div. euclidienne dans F_p[X] (i=0: le quotient, i=1: le reste)
-polynome algo_euclide(polynome*, polynome*, int p);                    // PGCD dans F_p[X] (Algorithme d'Euclide)
-polynome algo_euclide_etendu(polynome* P, polynome* Q, int p, int i);  // Euclide étendu (si uP+vQ=pgcd alors i=0: v, sinon: u)
+/*  Division euclidienne de A par B dans F_p[X] (i=0: quotient, i=1: reste)
+    Stocke dans:    Quotient de la div. si i=0
+                    Reste de la div. si i=1   */
+int cf_divp_mod(polynome* P, polynome* A, polynome* B, int p, int i);
+
+/*  Stocke PGCD(A, B) mod p dans P  */
+int cf_pgcdp_mod(polynome* P, polynome* A, polynome* B, int p);
+
+/*  Algorithme d'Euclide étendu dans F_p[X] (si uA+vB=pgcd(A, B) alors i=0: P <- v, sinon: P <- u)  */
+int cf_bezoutp_mod(polynome* P, polynome* A, polynome* B, int p, int i);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|

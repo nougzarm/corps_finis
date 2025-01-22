@@ -654,31 +654,9 @@ int cf_puissancep_mod(polynome* P, polynome* A, int exp, int p){
     return result;
 }
 
-polynome puissance_mod(polynome* A, int exposant, int p){
-    polynome result;
-    if (exposant == 0){
-        result = monome(1, 0);
-        return result;
-    }
-    else if (exposant == 1){
-        result = copie(A);
-        return result;
-    }
-    else {
-        result = copie(A);
-        polynome inter;
-        for (int i = 2; i<=exposant; i++){
-            inter = multiplication_mod(A, &result, p);
-            vider(&result);
-            result = copie(&inter);
-            vider(&inter);
-        }
-        return result;
-    }
-}
-
-polynome division_euclid(polynome* A, polynome* B, int p, int i){
-    cf_redp_int_tr(A, p); cf_redp_int_tr(B, p);
+int cf_divp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
+    cf_redp_int_tr(A, p);
+    cf_redp_int_tr(B, p);
     polynome Q, M;
     Q = polynull();
     polynome R = copie(A);
@@ -686,32 +664,45 @@ polynome division_euclid(polynome* A, polynome* B, int p, int i){
         M = monome( R.coeff[R.degre] * inverse_mod(B->coeff[B->degre], p), R.degre - B->degre );
         ajout(&Q, &M);
         cf_redp_int_tr(&Q, p);
-        vider(&M);
-        vider(&R);
+        viderp(&M);
+        viderp(&R);
         R = difference_etendu_mod(A, &Q, B, p);
     }
-    if (i == 0){return Q;}
-    else {return R;}
+    if (i == 0){
+        viderp(&R);
+        initp_copie(P, &Q);
+        viderp(&Q);
+        return 0;
+    }
+    else {
+        viderp(&Q);
+        initp_copie(P, &R);
+        viderp(&R);
+        return 0;
+    }
 }
 
-polynome algo_euclide(polynome* P, polynome* Q, int p){
-    if (Q->degre > P->degre){
-        swap(P, Q);
+int cf_pgcdp_mod(polynome* P, polynome* A, polynome* B, int p)
+polynome algo_euclide(polynome* A, polynome* B, int p){
+    if (B->degre > A->degre){
+        swap(A, B);
     }
-    polynome r0 = copie(P);
-    polynome r1 = copie(Q);
-    polynome r2 = division_euclid(&r0, &r1, p, 1);
+    polynome r0;
+    polynome r1;
+    polynome r2;
+    initp_copie(&r0, A);
+    initp_copie(&r1, B);
+    int result = cf_divp_mod(&r2, &r0, &r1, p, 1);
     while ( r2.degre != -1 ){
-        vider(&r0);
-        r0 = copie(&r1);
-        vider(&r1);
-        r1 = copie(&r2);
-        vider(&r2);
-        r2 = division_euclid(&r0, &r1, p, 1);
+        cf_initp_copie(&r0, &r1);
+        cf_initp_copie(&r1, &r2);
+        result = cf_divp_mod(&r2, &r0, &r1, p, 1);
     }
-    vider(&r0); vider(&r2);
+    viderp(&r0); 
+    viderp(&r2);
     unitaire(&r1, p);
-    return r1;
+    cf_initp_copie(P, &r1);
+    return result;
 }
 
 // Ici le degré de P est supposé supérieur à celui de Q
