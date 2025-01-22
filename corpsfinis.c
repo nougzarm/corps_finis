@@ -326,7 +326,7 @@ int coeff_dominantp(polynome* P){
     }
 }
 
-void mulp_scalaire(polynome* P, int n){
+void mulp_int(polynome* P, int n){
     if (P->degre == -1)
         return ; // P est nul
     if (n == 0){
@@ -341,80 +341,78 @@ void mulp_scalaire(polynome* P, int n){
     }
 }
 
-polynome addition(polynome* P, polynome* Q){
-    polynome S;
-    if (P->degre != Q->degre){
-        S.degre = max(P->degre, Q->degre);
-        S.coeff = calloc(S.degre + 1, sizeof(int));
-        int mini = min(P->degre, Q->degre); 
+int addp_polynomes(polynome* P, polynome* A, polynome* B){
+    initp_polynull(P);
+    if (A->degre != B->degre){
+        P->degre = max(A->degre, B->degre);
+        P->coeff = calloc(P->degre + 1, sizeof(int));
+        int mini = min(A->degre, B->degre);
         for (int i = 0; i <= mini; i++){
-            S.coeff[i] = P->coeff[i] + Q->coeff[i];
+            P->coeff[i] = A->coeff[i] + B->coeff[i];
         }
-        if (P->degre > Q->degre){
+        if (A->degre > B->degre){
             for (int i = mini + 1; i <= P->degre; i++){
-                S.coeff[i] = P->coeff[i];
+                P->coeff[i] = A->coeff[i];
             }
         }
         else {
-            for (int i = mini + 1; i <= Q->degre; i++){
-                S.coeff[i] = Q->coeff[i];
+            for (int i = mini + 1; i <= P->degre; i++){
+                P->coeff[i] = B->coeff[i];
             }
         }
-        return S;
+        return 0;
     }
     else {
-        int n = P->degre;
-        S.degre = -1;
+        int n = A->degre;
+        P->degre = -1;
         for (int i = n; i >= 0; i--){
-            if (P->coeff[i] + Q->coeff[i] != 0) {
-                S.degre = i;
+            if (A->coeff[i] + B->coeff[i] != 0) {
+                P->degre = i;
                 break;
             }
         }
-        if (S.degre == -1){
-            S.coeff = NULL;
-            return S;
+        if (P->degre == -1){
+            P->coeff = NULL;
+            return 0;
         }
-        S.coeff = calloc(S.degre + 1, sizeof(int));
-        for (int i = 0; i <= S.degre; i++){
-            S.coeff[i] = P->coeff[i] + Q->coeff[i];
+        P->coeff = calloc(P->degre + 1, sizeof(int));
+        for (int i = 0; i <= P->degre; i++){
+            P->coeff[i] = A->coeff[i] + B->coeff[i];
         }
-        return S;
+        return 0;
     }
 }
 
-
-polynome oppose(polynome* P){
-    polynome Q;
-    Q.degre = P->degre;
-    if (Q.degre == -1) {
-        Q.coeff = NULL;
+int opposep_polynome(polynome* P, polynome* A){
+    initp_polynull(P);
+    if(A->degre == -1){
+        return 0;
     }
-    else {
-        Q.coeff = calloc(Q.degre + 1, sizeof(int));
-        for (int i = 0; i <= Q.degre; i++){
-            Q.coeff[i] = - P->coeff[i];
-        }
+    P->degre = A->degre;
+    P->coeff = calloc(P->degre + 1, sizeof(int));
+    for (int i = 0; i <= P->degre; i++){
+        P->coeff[i] = - A->coeff[i];
     }
-    return Q;
+    return 0;
 }
 
-
-polynome soustraction(polynome* P, polynome* Q){
-    polynome T = oppose(Q);
-    return addition(P, &T);
+int subp_polynomes(polynome* P, polynome* A, polynome* B){
+    initp_polynull(P);
+    polynome T;
+    opposep_polynome(&T, B);
+    addp_polynomes(P, A, &T);
+    vider(&T);
+    return 0;
 }
 
-polynome multiplication(polynome* A, polynome* B){
-    polynome P;
+int mulp_polynomes(polynome* P, polynome* A, polynome* B){
+    initp_polynull(P);
     if ( (A->degre == -1) || (B->degre == -1) ){
-        P.degre = -1;
-        P.coeff = NULL;
-        return P;
+        return 0;
     }
     else {
-        P.degre = A->degre + B->degre;
-        P.coeff = calloc(P.degre + 1, sizeof(int));
+        P->degre = A->degre + B->degre;
+        P->coeff = calloc(P.degre + 1, sizeof(int));
         int C;
         for (int k = 0; k <= P.degre; k++){
             C = 0;
@@ -423,54 +421,51 @@ polynome multiplication(polynome* A, polynome* B){
                     C = C + (A->coeff[i])*(B->coeff[k-i]);
                 }
             }
-            P.coeff[k] = C;
+            P->coeff[k] = C;
         }
-        return P;
+        return 0;
     }
 }
 
-polynome puissance_polynome(polynome* A, int exposant){
-    polynome result;
-    if (exposant == 0){
-        result = monome(1, 0);
-        return result;
+int puissancep_int(polynome* P, polynome* A, int exp){
+    initp_polynull(P);
+    if (exp == 0){
+        initp_monome(P, 1, 0);
+        return 0;
     }
-    else if (exposant == 1){
-        result = copie(A);
-        return result;
+    else if (exp == 1){
+        initp_copie(P, A);
+        return 0;
     }
     else {
-        result = copie(A);
-        polynome inter;
-        for (int i = 2; i<=exposant; i++){
-            inter = multiplication(A, &result);
-            vider(&result);
-            result = copie(&inter);
-            vider(&inter);
+        initp_copie(P, A);
+        polynome T;
+        for (int i = 2; i<=exp; i++){
+            mulp_polynomes(&T, P, A);
+            initp_copie(P, &T);
         }
-        return result;
+        viderp(&T);
+        return 0;
     }
 }
 
-polynome reduction_modulo(polynome* P, int p){
-    polynome Q; 
-    Q.degre = -1;
-    for (int i = P->degre; i >= 0; i--){
-        if ( (P->degre)%p != 0 ){
-            Q.degre = i;
+int redp_int(polynome* P, polynome* A, int p){
+    initp_polynull(P);
+    for (int i = A->degre; i >= 0; i--){
+        if ( (A->degre)%p != 0 ){
+            P->degre = i;
             break;
         }
     }
-    if ( Q.degre == -1 ){
-        Q.coeff = NULL;
-        return Q;
+    if ( P->degre == -1 ){
+        return 0;
     }
     else {
-        Q.coeff = calloc(Q.degre + 1, sizeof(int));
-        for (int i = 0; i <= Q.degre; i++){
-            Q.coeff[i] = modulo(P->coeff[i], p);
+        P->coeff = calloc(P->degre + 1, sizeof(int));
+        for (int i = 0; i <= P->degre; i++){
+            P->coeff[i] = modulo(A->coeff[i], p);
         }
-        return Q;
+        return 0;
     }
 }
 

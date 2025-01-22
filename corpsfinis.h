@@ -116,25 +116,25 @@ polynome demi_surjection(polynome*, int p, polynome* f);           // Surjection
 int coeff_dominantp(polynome* P);
 
 /*  Multiplie un polynome P par un scalaire n    */
-void mulp_scalaire(polynome* P, int n);
+void mulp_int(polynome* P, int n);
 
-/*  Stocker le polynome somme A + B dans P    */
+/*  Stocker le polynome somme A+B dans P    */
 int addp_polynomes(polynome* P, polynome* A, polynome* B);
 
 /*  Stocker le polynome opposé -A dans P    */
-int opposep(polynome* P, polynome* A);
+int opposep_polynome(polynome* P, polynome* A);
 
-/*  Stocker le polynome différence A + B dans P    */
+/*  Stocker le polynome différence A+B dans P    */
 int subp_polynomes(polynome* P, polynome* A, polynome* B);
 
 /*  Stocker le polynome produit A*B dans P    */
-int mulp_difference(polynome* P, polynome* A, polynome* B);
+int mulp_polynomes(polynome* P, polynome* A, polynome* B);
 
 /*  Stocker le polynome A^exp dans P    */
-int puissance_polynome(polynome* P, polynome* A, int exp);
+int puissancep_int(polynome* P, polynome* A, int exp);
 
 /*  Stocker le polynome A mod p dans P    */
-int reduction_modulo(polynome* P, polynome* A, int p);
+int redp_int(polynome* P, polynome* A, int p);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
