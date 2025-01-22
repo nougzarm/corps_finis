@@ -164,6 +164,12 @@ int cf_addp_mod(polynome* P, polynome* A, polynome* B, int p);
 /*  Transformation P <- P+A mod p   */
 int cf_addp_mod_tr(polynome* P, polynome* A, int p);
 
+/*  Stocker l'opposé -A mod p dans P   */
+int cf_opposep_mod(polynome* P, polynome* A, int p);
+
+/*  Transformation P <- -P mod p   */
+int cf_opposep_mod_tr(polynome* P, int p);
+
 /*  Stocker la différence A-B mod p dans P   */
 int cf_subp_mod(polynome* P, polynome* A, polynome* B, int p);
 

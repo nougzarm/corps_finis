@@ -602,6 +602,18 @@ int cf_addp_mod_tr(polynome* P, polynome* A, int p){
     return result;
 };
 
+int cf_opposep_mod(polynome* P, polynome* A, int p){
+    int result = cf_opposep(P, A);
+    cf_redp_int_tr(P, p);
+    return result;
+};
+
+int cf_opposep_mod_tr(polynome* P, int p){
+    int result = cf_opposep_tr(P);
+    cf_redp_int_tr(P, p);
+    return result;
+};
+
 int cf_subp_mod(polynome* P, polynome* A, polynome* B, int p){
     int result = cf_subp(P, A, B);
     cf_redp_int_tr(P, p);
