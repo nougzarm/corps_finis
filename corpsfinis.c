@@ -197,29 +197,6 @@ void viderp(polynome* P){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
-int coeff_dominantp(polynome* P){
-    if (P->degre == -1){
-        return 0;
-    }
-    else {
-        return P->coeff[P->degre];
-    }
-}
-
-void mulp_scalaire(polynome* P, int n){
-    if (P->degre == -1)
-        return ; // P est nul
-    if (n == 0){
-        initp_polynull(P);
-        return;
-    }
-    else {
-        for (int i = 0; i<= P->degre; i++){
-            P->coeff[i] = n * P->coeff[i];
-        }
-        return;
-    }
-}
 
 void modulo_transfo(polynome* P, int p){
     if ( P->degre == -1 ){
@@ -253,8 +230,8 @@ void scalaire_mod(int n, polynome* P, int p){
 }
 
 void unitaire(polynome* P, int p){
-    int C = P->coeff[P->degre]; // coeff dominant de P
-    int C_inv = inverse_mod(C, p); // son inverse
+    int C = P->coeff[P->degre];     // coeff dominant de P
+    int C_inv = inverse_mod(C, p);  // son inverse
     scalaire(C_inv, P);
     modulo_transfo(P, p);
     return;
@@ -340,6 +317,30 @@ static void flip(polynome* r0, polynome* r1, polynome* r2){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
+int coeff_dominantp(polynome* P){
+    if (P->degre == -1){
+        return 0;
+    }
+    else {
+        return P->coeff[P->degre];
+    }
+}
+
+void mulp_scalaire(polynome* P, int n){
+    if (P->degre == -1)
+        return ; // P est nul
+    if (n == 0){
+        initp_polynull(P);
+        return;
+    }
+    else {
+        for (int i = 0; i<= P->degre; i++){
+            P->coeff[i] = n * P->coeff[i];
+        }
+        return;
+    }
+}
+
 polynome addition(polynome* P, polynome* Q){
     polynome S;
     if (P->degre != Q->degre){

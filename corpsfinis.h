@@ -93,11 +93,6 @@ void viderp(polynome* P);
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
  */
-/*  Retourne le coefficient dominant d'un polynome P    */
-int coeff_dominantp(polynome* P);
-
-/*  Multiplie un polynome P par un scalaire n    */
-void mulp_scalaire(polynome* P, int n);
 void scalaire_mod(int n, polynome* P, int p);               // P -> nP  (dans F_p[X])
 void scalaire_Fq(int n, polynome* P, int p, polynome* f);   // P -> nP  (dans F_q)
 void modulo_transfo(polynome* P, int p);                    // P -> P [p]
@@ -117,12 +112,29 @@ polynome demi_surjection(polynome*, int p, polynome* f);           // Surjection
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
  */
-polynome addition(polynome*, polynome*);                 // Addition dans Z[X]
-polynome oppose(polynome*);                              // Opposé dans Z[X]
-polynome soustraction(polynome*, polynome*);             // Soustraction dans Z[X]
-polynome multiplication(polynome*, polynome*);           // Multiplication dans Z[X]
-polynome puissance_polynome(polynome*, int exposant);    // Puissance dans Z[X]
-polynome reduction_modulo(polynome*, int p);             // Réduit un polynome de Z[X] modulo p
+/*  Retourne le coefficient dominant d'un polynome P    */
+int coeff_dominantp(polynome* P);
+
+/*  Multiplie un polynome P par un scalaire n    */
+void mulp_scalaire(polynome* P, int n);
+
+/*  Stocker le polynome somme A + B dans P    */
+int addp_polynomes(polynome* P, polynome* A, polynome* B);
+
+/*  Stocker le polynome opposé -A dans P    */
+int opposep(polynome* P, polynome* A);
+
+/*  Stocker le polynome différence A + B dans P    */
+int subp_polynomes(polynome* P, polynome* A, polynome* B);
+
+/*  Stocker le polynome produit A*B dans P    */
+int mulp_difference(polynome* P, polynome* A, polynome* B);
+
+/*  Stocker le polynome A^exp dans P    */
+int puissance_polynome(polynome* P, polynome* A, int exp);
+
+/*  Stocker le polynome A mod p dans P    */
+int reduction_modulo(polynome* P, polynome* A, int p);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
