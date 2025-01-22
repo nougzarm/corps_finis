@@ -317,7 +317,7 @@ static void flip(polynome* r0, polynome* r1, polynome* r2){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
-int coeff_dominantp(polynome* P){
+int cf_cdp(polynome* P){
     if (P->degre == -1){
         return 0;
     }
@@ -326,7 +326,7 @@ int coeff_dominantp(polynome* P){
     }
 }
 
-void mulp_int(polynome* P, int n){
+void cf_mulp_int(polynome* P, int n){
     if (P->degre == -1)
         return ; // P est nul
     if (n == 0){
@@ -341,7 +341,7 @@ void mulp_int(polynome* P, int n){
     }
 }
 
-int addp_polynomes(polynome* P, polynome* A, polynome* B){
+int cf_addp(polynome* P, polynome* A, polynome* B){
     initp_polynull(P);
     if (A->degre != B->degre){
         P->degre = max(A->degre, B->degre);
@@ -383,7 +383,7 @@ int addp_polynomes(polynome* P, polynome* A, polynome* B){
     }
 }
 
-int opposep_polynome(polynome* P, polynome* A){
+int cf_opposep(polynome* P, polynome* A){
     initp_polynull(P);
     if(A->degre == -1){
         return 0;
@@ -396,16 +396,16 @@ int opposep_polynome(polynome* P, polynome* A){
     return 0;
 }
 
-int subp_polynomes(polynome* P, polynome* A, polynome* B){
+int cf_subp(polynome* P, polynome* A, polynome* B){
     initp_polynull(P);
     polynome T;
-    opposep_polynome(&T, B);
-    addp_polynomes(P, A, &T);
+    cf_opposep(&T, B);
+    cf_addp(P, A, &T);
     vider(&T);
     return 0;
 }
 
-int mulp_polynomes(polynome* P, polynome* A, polynome* B){
+int cf_mulp(polynome* P, polynome* A, polynome* B){
     initp_polynull(P);
     if ( (A->degre == -1) || (B->degre == -1) ){
         return 0;
@@ -427,7 +427,7 @@ int mulp_polynomes(polynome* P, polynome* A, polynome* B){
     }
 }
 
-int puissancep_int(polynome* P, polynome* A, int exp){
+int cf_puissancep(polynome* P, polynome* A, int exp){
     initp_polynull(P);
     if (exp == 0){
         initp_monome(P, 1, 0);
@@ -441,7 +441,7 @@ int puissancep_int(polynome* P, polynome* A, int exp){
         initp_copie(P, A);
         polynome T;
         for (int i = 2; i<=exp; i++){
-            mulp_polynomes(&T, P, A);
+            cf_mulp(&T, P, A);
             initp_copie(P, &T);
         }
         viderp(&T);
@@ -449,7 +449,7 @@ int puissancep_int(polynome* P, polynome* A, int exp){
     }
 }
 
-int redp_int(polynome* P, polynome* A, int p){
+int cf_redp_int(polynome* P, polynome* A, int p){
     initp_polynull(P);
     for (int i = A->degre; i >= 0; i--){
         if ( (A->degre)%p != 0 ){

@@ -102,10 +102,6 @@ polynome difference_etendu_mod(polynome* A, polynome* Q, polynome* B, int p);   
 polynome surjection(polynome*, int p, polynome* f);                // Surjection Z[X] ->> F_p[X] ->> F_p[X]/(f)   
 polynome demi_surjection(polynome*, int p, polynome* f);           // Surjection F_p[X] ->> F_p[X]/(f)
 
-
-
-
-
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
     |                                           5. OPERATIONS DANS Z[X]                                              |
@@ -113,28 +109,28 @@ polynome demi_surjection(polynome*, int p, polynome* f);           // Surjection
     |----------------------------------------------------------------------------------------------------------------|
  */
 /*  Retourne le coefficient dominant d'un polynome P    */
-int coeff_dominantp(polynome* P);
+int cf_cdp(polynome* P);
 
 /*  Multiplie un polynome P par un scalaire n    */
-void mulp_int(polynome* P, int n);
+void cf_mulp_int(polynome* P, int n);
 
 /*  Stocker le polynome somme A+B dans P    */
-int addp_polynomes(polynome* P, polynome* A, polynome* B);
+int cf_addp(polynome* P, polynome* A, polynome* B);
 
 /*  Stocker le polynome opposé -A dans P    */
-int opposep_polynome(polynome* P, polynome* A);
+int cf_opposep(polynome* P, polynome* A);
 
 /*  Stocker le polynome différence A+B dans P    */
-int subp_polynomes(polynome* P, polynome* A, polynome* B);
+int cf_subp(polynome* P, polynome* A, polynome* B);
 
 /*  Stocker le polynome produit A*B dans P    */
-int mulp_polynomes(polynome* P, polynome* A, polynome* B);
+int cf_mulp(polynome* P, polynome* A, polynome* B);
 
 /*  Stocker le polynome A^exp dans P    */
-int puissancep_int(polynome* P, polynome* A, int exp);
+int cf_puissancep(polynome* P, polynome* A, int exp);
 
 /*  Stocker le polynome A mod p dans P    */
-int redp_int(polynome* P, polynome* A, int p);
+int cf_redp_int(polynome* P, polynome* A, int p);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
