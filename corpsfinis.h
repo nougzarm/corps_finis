@@ -226,6 +226,9 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p);
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
+/*  Libération de la mémoire occupée par un corps fini F    */
+int cf_vidercf(corpsfini* F);
+
 /*  Initialisation d'un corps fini F_q = F_p[X]/(f)    
     Remarques:  - p doit être un nombre premier
                 - f doit être un polynome irréductible de F_p[X]
@@ -237,9 +240,6 @@ int cf_initcf_pol(corpsfini* F, int p, polynome* f);
 
 /*  Initialisation d'un corps fini F_q = F_p = Z/pZ    */
 int cf_initcf_int(corpsfini* F, int p);
-
-/*  Libération de la mémoire occupée par un corps fini F    */
-int cf_vidercf(corpsfini* F);
 
 /*  Retourne le cardinal d'un corps fini F  */
 int cf_cardinalcf(corpsfini* F);
@@ -253,6 +253,8 @@ int cf_comparcf(corpsfini* F, corpsfini* K);
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
+/*  Libération de la mémoire occupée par un element x d'un corps fini    */
+int cf_viderel(element* x);
 
 /*  Initialisation d'un élément de F via sa forme polynomiale P
     Remarque: penser à vider x AINSI que P après avoir fini   */
@@ -261,12 +263,13 @@ int cf_initel_pol(element* x, corpsfini* F, polynome* P);
 /*  Initialisation de x=n (utile lorsque F est de la forme Z/pZ)   */
 int cf_initel_int(element* x, corpsfini* F, int n);
 
-/*  Libération de la mémoire occupée par un element x d'un corps fini    */
-int cf_viderel(element* x);
+/*  Initialisation d'un élément de x en y stockant une copie de y   */
+int cf_initel_copie(element* x, element* y);
+
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
-    |                            9. OPERATIONS DANS UN CORPS FINI F_q = F_p[X]/(f)                                   |
+    |                                   9. OPERATIONS DANS UN CORPS FINI F                                           |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
@@ -275,7 +278,24 @@ int cf_viderel(element* x);
                 1 si echec (p.ex pas définis sur le même corps)*/
 int cf_addel(element* x, element* y, element* z);
 
-polynome addition_Fq(polynome*, polynome*, int p, polynome* f);        // Addition dans F_q
+/*  Transformation x <- y dans F 
+    Retourne:   0 si réussi
+                1 si echec (p.ex pas définis sur le même corps) */
+int cf_addel_tr(element* x, element* y);
+
+/*  Stocker l'opposé -y dans x  */
+int cf_opposeel(element* x, element* y);
+
+/*  Transformation x <- -x  */
+int cf_opposeel_tr(element* x);
+
+/*  Stocker la différence y-z dans x 
+    Retourne:   0 si réussi
+                1 si echec (p.ex pas définis sur le même corps)*/
+int cf_subel(element* x, element* y, element* z);
+
+
+
 polynome multiplication_Fq(polynome*, polynome*, int p, polynome* f);  // Multiplication dans F_q
 polynome puissance_Fq(polynome*, int exposant, int p, polynome* f);    // Puissance dans F_q
 polynome inverse(polynome*, int p, polynome* f);                       // Renvoie l'inverse d'un elt dans F_q
