@@ -54,7 +54,7 @@ int puissance_modulo(int m, int e, int p){
     return modulo(result, p);
 }
 
-int inverse_mod(int a, int p){
+int cf_inv_mod(int a, int p){
     int r0 = p, r1 = a, r2 = r0%r1;
     int v0 = 0, v1 = 1, v2 = v0 - (r0/r1)*v1;
     while ( r2 != 0 ){
@@ -76,7 +76,7 @@ int inverse_mod(int a, int p){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
-void initp_polynull(polynome* P){
+void cf_initp_polynull(polynome* P){
     if (P->coeff != NULL){
         free(P->coeff);
     }
@@ -85,7 +85,7 @@ void initp_polynull(polynome* P){
     return;
 }
 
-int initp_copie(polynome* P, polynome* Q){
+int cf_initp_copie(polynome* P, polynome* Q){
     // Si P est deja initialisé, on le vide
     if(P->degre != NULL){
         free(P->coeff);
@@ -107,7 +107,7 @@ int initp_copie(polynome* P, polynome* Q){
     }
 }
 
-int initp_monome(polynome* P, int coeff, int exp){
+int cf_initp_monome(polynome* P, int coeff, int exp){
     if(exp < 0){
         return 1;   // Choisir un exposant positif
     }
@@ -130,7 +130,7 @@ int initp_monome(polynome* P, int coeff, int exp){
 }
 
 // Initialisation d'un polynôme à partir d'une liste contenant les coefficients souhaités
-void initp_polynome(polynome* P, int* coeff, int degre){
+void cf_initp_polynome(polynome* P, int* coeff, int degre){
     if(degre < 0){
         return 1;   // Choisir un degré positif (ou utiliser initp_polynull pour degre = -1)
     }
@@ -206,7 +206,7 @@ void scalaire_mod(int n, polynome* P, int p){
 
 void unitaire(polynome* P, int p){
     int C = P->coeff[P->degre];     // coeff dominant de P
-    int C_inv = inverse_mod(C, p);  // son inverse
+    int C_inv = cf_inv_mod(C, p);  // son inverse
     scalaire(C_inv, P);
     cf_redp_int_tr(P, p);
     return;
@@ -657,27 +657,27 @@ int cf_puissancep_mod(polynome* P, polynome* A, int exp, int p){
 int cf_divp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
     cf_redp_int_tr(A, p);
     cf_redp_int_tr(B, p);
-    polynome Q, M;
-    Q = polynull();
-    polynome R = copie(A);
+    polynome Q, M, R;
+    cf_initp_polynull(&Q);
+    cf_initp_copie(&R, A);
     while ( R.degre >= B->degre ) {
-        M = monome( R.coeff[R.degre] * inverse_mod(B->coeff[B->degre], p), R.degre - B->degre );
-        ajout(&Q, &M);
+        cf_initp_monome(&M, R.coeff[R.degre] * cf_inv_mod(B->coeff[B->degre], p), R.degre - B->degre );
+        cf_addp_tr(&Q, &M);
         cf_redp_int_tr(&Q, p);
-        viderp(&M);
-        viderp(&R);
+        cf_viderp(&M);
+        cf_viderp(&R);
         R = difference_etendu_mod(A, &Q, B, p);
     }
     if (i == 0){
-        viderp(&R);
-        initp_copie(P, &Q);
-        viderp(&Q);
+        cf_viderp(&R);
+        cf_initp_copie(P, &Q);
+        cf_viderp(&Q);
         return 0;
     }
     else {
-        viderp(&Q);
-        initp_copie(P, &R);
-        viderp(&R);
+        cf_viderp(&Q);
+        cf_initp_copie(P, &R);
+        cf_viderp(&R);
         return 0;
     }
 }
@@ -705,43 +705,56 @@ int cf_pgcdp_mod(polynome* P, polynome* A, polynome* B, int p){
     return result;
 }
 
-// Ici le degré de P est supposé supérieur à celui de Q
-polynome algo_euclide_etendu(polynome* P, polynome* Q, int p, int i){
-    polynome r0 = copie(P);
-    polynome r1 = copie(Q);
-    polynome u0 = monome(1, 0); polynome u1 = monome(0, 0);
-    polynome v0 = monome(0, 0); polynome v1 = monome(1, 0);
-    polynome r2 = division_euclid(&r0, &r1, p, 1);
-    polynome q = division_euclid(&r0, &r1, p, 0);
-    polynome u2 = difference_etendu_mod(&u0, &q, &u1, p);
-    polynome v2 = difference_etendu_mod(&v0, &q, &v1, p);
+// Ici le degré de A est supposé supérieur à celui de B
+int cf_bezoutp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
+    polynome r0, r1, r2;
+    initp_copie(&r0, A);
+    initp_copie(&r1, B);
+
+    polynome u0, u1, u2;
+    polynome v0, v1, v2;
+    initp_monome(&u0, 1, 0);
+    initp_monome(&u1, 0, 0);
+    initp_monome(&v0, 0, 0);
+    initp_monome(&v1, 1, 0);
+
+    cf_divp_mod(&r2, &r0, &r1, p, 1);   // r2 = r0 - r1*q
+    polynome q;
+    cf_divp_mod(&q, &r0, &r1, p, 0);
+    
+    u2 = difference_etendu_mod(&u0, &q, &u1, p);
+    v2 = difference_etendu_mod(&v0, &q, &v1, p);
+
     while ( r2.degre != -1 ){
         flip(&r0, &r1, &r2);
-        r2 = division_euclid(&r0, &r1, p, 1);
-        vider(&q);
-        q = division_euclid(&r0, &r1, p, 0);
+        cf_divp_mod(&r2, &r0, &r1, p, 1);
+        cf_divp_mod(&q, &r0, &r1, p, 0);
         flip(&u0, &u1, &u2);
         u2 = difference_etendu_mod(&u0, &q, &u1, p);
         flip(&v0, &v1, &v2);
         v2 = difference_etendu_mod(&v0, &q, &v1, p);
     }
     int C = r1.coeff[r1.degre];
-    int C_inv = inverse_mod(C, p);
-    vider(&r0); vider(&r1); vider(&r2);
-    vider(&u0); vider(&u2);
-    vider(&v0); vider(&v2);
-    vider(&q);
+    int C_inv = cf_inv_mod(C, p);
+    cf_viderp(&r0); cf_viderp(&r1); cf_viderp(&r2);
+    cf_viderp(&u0); cf_viderp(&u2);
+    cf_viderp(&v0); cf_viderp(&v2);
+    cf_viderp(&q);
     if ( i == 0 ){
-        vider(&v1);
-        scalaire(C_inv, &u1);
+        cf_viderp(&v1);
+        cf_mulp_int_tr(&u1, C_inv);
         cf_redp_int_tr(&u1, p);
-        return u1;
+        cf_initp_copie(P, &u1);
+        cf_viderp(&u1);
+        return 0;
     }
     else {
-        vider(&u1);
-        scalaire(C_inv, &v1);
+        cf_viderp(&u1);
+        cf_mulp_int_tr(&v1, C_inv);
         cf_redp_int_tr(&v1, p);
-        return v1;
+        cf_initp_copie(P, &v1);
+        cf_viderp(&v1);
+        return 0;
     }
 }
 
