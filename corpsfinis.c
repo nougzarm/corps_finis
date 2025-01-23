@@ -203,26 +203,13 @@ void cf_swapp(polynome* P, polynome* Q){
     cf_initp_copie(P, Q);
     cf_initp_copie(Q, &T);
     cf_viderp(&T);
+    return;
 }
 
 void cf_flipp(polynome* r0, polynome* r1, polynome* r2){
     cf_initp_copie(r0, r1);
     cf_initp_copie(r1, r2);
     cf_viderp(r2);
-    return;
-}
-
-void scalaire_mod(int n, polynome* P, int p){
-    scalaire(n, P);
-    cf_redp_int_tr(P, p);
-    return;
-}
-
-void unitaire(polynome* P, int p){
-    int C = P->coeff[P->degre];     // coeff dominant de P
-    int C_inv = cf_inv_mod(C, p);   // son inverse
-    scalaire(C_inv, P);
-    cf_redp_int_tr(P, p);
     return;
 }
 
@@ -432,6 +419,25 @@ int cf_subp_tr(polynome* P, polynome* A){
     cf_opposep(&T, A);
     cf_addp_tr(P, &T);
     cf_viderp(&T);
+    return 0;
+}
+
+int cf_mulp_int_mod(polynome* P, polynome* A, int n, int p){
+    cf_mulp_int(P, A, n);
+    cf_redp_int_tr(P, p);
+    return 0;
+}
+
+int cf_mulp_int_mod_tr(polynome* P, int n, int p){
+    cf_mulp_int_tr(P, n);
+    cf_redp_int_tr(P, p);
+    return 0;
+}
+
+int cf_unitp_mod(polynome* P, int p){
+    int C = P->coeff[P->degre];     // coeff dominant de P
+    int C_inv = cf_inv_mod(C, p);   // son inverse
+    cf_mulp_int_mod_tr(P, C_inv);
     return 0;
 }
 

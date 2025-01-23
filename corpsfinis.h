@@ -98,10 +98,6 @@ void cf_swapp(polynome* P, polynome* Q);
 /*  Stocke: r0 <- r1 et r1 <- r2 (et vide r2)   */
 void cf_flipp(polynome* r0, polynome* r1, polynome* r2);
 
-void scalaire_mod(int n, polynome* P, int p);               // P -> nP  (dans F_p[X])
-void scalaire_Fq(int n, polynome* P, int p, polynome* f);   // P -> nP  (dans F_q)
-void unitaire(polynome* P, int p);                          // P [p] -> P/CoeffDom(P) [p]
-
 polynome surjection(polynome*, int p, polynome* f);                // Surjection Z[X] ->> F_p[X] ->> F_p[X]/(f)
 polynome demi_surjection(polynome*, int p, polynome* f);           // Surjection F_p[X] ->> F_p[X]/(f)
 
@@ -183,6 +179,15 @@ int cf_subp_mod(polynome* P, polynome* A, polynome* B, int p);
 
 /*  Transformation P <- P-A mod p   */
 int cf_subp_mod_tr(polynome* P, polynome* A, int p);
+
+/*  Stocker le produit nA mod p dans P   */
+int cf_mulp_int_mod(polynome* P, polynome* A, int n, int p);
+
+/*  Transformation P <- nP mod p   */
+int cf_mulp_int_mod_tr(polynome* P, int n, int p);
+
+/*  Transformation P <- P*(1/cd(P) mod p),  où cd = coeff dominant  */
+int cf_unitp_mod(polynome* P, int p);
 
 /*  Stocker le produit A*B mod p dans P   */
 int cf_mulp_mod(polynome* P, polynome* A, polynome* B, int p);
