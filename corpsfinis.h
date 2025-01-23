@@ -11,8 +11,9 @@
         4. Gestion de polynomes
         5. Opérations dans Z[X]
         6. Opérations dans F_p[X]
-        7. Initialisation/gestion corps finis et éléments
-        8. Opérations dans un corps fini
+        7. Initialisation/gestion de corps finis
+        8. Initialisation/gestion d'éléments de corps finis
+        9. Opérations dans un corps fini
         ...     */
 
 /*  |----------------------------------------------------------------------------------------------------------------|
@@ -97,17 +98,18 @@ void cf_swapp(polynome* P, polynome* Q);
 /*  Stocke: r0 <- r1 et r1 <- r2 (et vide r2)   */
 void cf_flipp(polynome* r0, polynome* r1, polynome* r2);
 
-polynome surjection(polynome*, int p, polynome* f);                // Surjection Z[X] ->> F_p[X] ->> F_p[X]/(f)
-polynome demi_surjection(polynome*, int p, polynome* f);           // Surjection F_p[X] ->> F_p[X]/(f)
-
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
     |                                           5. OPERATIONS DANS Z[X]                                              |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
-/*  Compare deux polynomes P et A (leurs coefficients)  */
+/*  Compare deux polynomes P et A (leurs coefficients) 
+    Retourne 1 si P=A et 0 sinon     */
 int cf_comparp(polynome* P, polynome* A);
+
+/*  Compare P au monome X (Retourne 1 si P=X et 0 sinon)    */
+int cf_comparp_X(polynome* P);
 
 /*  Retourne le coefficient dominant d'un polynome P    */
 int cf_cdp(polynome* P);
@@ -220,7 +222,7 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p);
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
-    |                            7. INITIALISATION/GESTION CORPS FINIS ET ELEMENTS                                   |
+    |                                 7. INITIALISATION/GESTION CORPS FINIS                                          |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
@@ -228,6 +230,7 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p);
     Remarques:  - p doit être un nombre premier
                 - f doit être un polynome irréductible de F_p[X]
                 - Pour définir F_q = F_p = Z/pZ, on peut choisir f = X (voir fonction init suivante)
+                - Penser à vider F AINSI que f après avoir fini (cf_vidercf et cf_viderp)
     Retourne:   1 si echec
                 0 si réussi    */
 int cf_initcf_pol(corpsfini* F, int p, polynome* f);
@@ -235,9 +238,29 @@ int cf_initcf_pol(corpsfini* F, int p, polynome* f);
 /*  Initialisation d'un corps fini F_q = F_p = Z/pZ    */
 int cf_initcf_int(corpsfini* F, int p);
 
+/*  Libération de la mémoire occupée par un corps fini F    */
+int cf_vidercf(corpsfini* F);
+
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
-    |                            8. OPERATIONS DANS UN CORPS FINI F_q = F_p[X]/(f)                                   |
+    |                            8. INITIALISATION/GESTION D'ELEMENTS DE CORPS FINIS                                 |
+    |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|
+*/
+
+/*  Initialisation d'un élément de F via sa forme polynomiale P
+    Remarque: penser à vider x AINSI que P après avoir fini   */
+int cf_initel_pol(element* x, corpsfini* F, polynome* P);
+
+/*  Initialisation de x=n (utile lorsque F est de la forme Z/pZ)   */
+int cf_initel_int(element* x, corpsfini* F, int n);
+
+/*  Libération de la mémoire occupée par un element x d'un corps fini    */
+int cf_viderel(element* x);
+
+/*  |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|
+    |                            9. OPERATIONS DANS UN CORPS FINI F_q = F_p[X]/(f)                                   |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */

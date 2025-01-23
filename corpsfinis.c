@@ -7,8 +7,9 @@
         4. Gestion de polynomes
         5. Opérations dans Z[X]
         6. Opérations dans F_p[X]
-        7. Initialisation/gestion corps finis et éléments
-        8. Opérations dans un corps fini
+        7. Initialisation/gestion de corps finis
+        8. Initialisation/gestion d'éléments de corps finis
+        9. Opérations dans un corps fini
         ...     */
 
 /*  |----------------------------------------------------------------------------------------------------------------|
@@ -225,6 +226,18 @@ int cf_comparp(polynome* P, polynome* A){
             }
         }
         return 1;
+    }
+}
+
+int cf_comparp_X(polynome* P){
+    if (P->degre != 1){
+        return 0;
+    }
+    else if (P->coeff[0] == 0 && P->coeff[1] == 1){
+        return 1;
+    }
+    else {
+        return 0;
     }
 }
 
@@ -730,7 +743,7 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p){
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
-    |                            7. INITIALISATION/GESTION CORPS FINIS ET ELEMENTS                                   |
+    |                                 7. INITIALISATION/GESTION CORPS FINIS                                          |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
@@ -754,6 +767,37 @@ int cf_initcf_int(corpsfini* F, int p){
     cf_initp_monome(&F->relation, 1, 1);
     return 0;   // Initialisation réussie
 }
+
+int cf_vidercf(corpsfini* F){
+    cf_viderp(&F->relation);
+    F->car = -1;
+    return 0;
+}
+
+/*  |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|
+    |                            8. INITIALISATION/GESTION D'ELEMENTS DE CORPS FINIS                                 |
+    |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|
+*/
+
+int cf_initel_pol(element* x, corpsfini* F, polynome* P){
+    x->corps = F;
+    cf_redp_pol(&x->representation, P, &F->relation, F->car);
+    return 0;   // Initialisation réussie
+}
+
+int cf_initel_int(element* x, corpsfini* F, int n){
+    x->corps = F;
+    cf_initp_monome(&x->representation, n, 1);
+    return 0;
+}
+
+int cf_viderel(element* x){
+    cf_viderp(&x->representation);
+    x->corps = NULL;
+    return 0;
+};
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
