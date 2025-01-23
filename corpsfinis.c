@@ -7,7 +7,7 @@
         4. Gestion de polynomes
         5. Opérations dans Z[X]
         6. Opérations dans F_p[X]
-        7. Initialisation corps finis et éléments
+        7. Initialisation/gestion corps finis et éléments
         8. Opérations dans un corps fini
         ...     */
 
@@ -730,11 +730,21 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p){
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
-    |                                 7. INITIALISATION CORPS FINIS ET ELEMENTS                                      |
+    |                            7. INITIALISATION/GESTION CORPS FINIS ET ELEMENTS                                   |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
- */
-
+*/
+int cf_initcf_p(corpsfini* F, int p, polynome* f){
+    if (p < 2){
+        return 1;   // p doit être un nombre premier
+    }
+    if (f->degre < 0){
+        return 1;   // f ne doit pas être nul
+    }
+    F->car = p;
+    cf_initp_copie(&F->relation, f);
+    return 0;   // Initialisation réussie
+}
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
@@ -742,7 +752,7 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p){
     |                            8. OPERATIONS DANS UN CORPS FINI F_q = F_p[X]/(f)                                   |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
- */
+*/
 int cardinal(int p, polynome* f){
     return puissance(p, f->degre);
 }

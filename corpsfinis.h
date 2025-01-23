@@ -11,7 +11,7 @@
         4. Gestion de polynomes
         5. Opérations dans Z[X]
         6. Opérations dans F_p[X]
-        7. Initialisation corps finis et éléments
+        7. Initialisation/gestion corps finis et éléments
         8. Opérations dans un corps fini
         ...     */
 
@@ -32,12 +32,12 @@ typedef struct{
 typedef struct{
     int car;
     polynome relation;
-} corps_fini;
+} corpsfini;
 
 /*  Structure d'élément de F_q, représenté par un polynome de F_p[X] modulo f    */
 typedef struct{
     polynome representation;
-    corps_fini* corps;
+    corpsfini* corps;
 } element;
 
 /*  |----------------------------------------------------------------------------------------------------------------|
@@ -45,7 +45,7 @@ typedef struct{
     |                                         2. OUTILS NOMBRES ENTIERS                                              |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
- */
+*/
 int max(int a, int b);          // max(a, b)
 int min(int a, int b);          // min(a, b)
 int modulo(int a, int b);       // a mod b
@@ -105,7 +105,7 @@ polynome demi_surjection(polynome*, int p, polynome* f);           // Surjection
     |                                           5. OPERATIONS DANS Z[X]                                              |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
- */
+*/
 /*  Compare deux polynomes P et A (leurs coefficients)  */
 int cf_comparp(polynome* P, polynome* A);
 
@@ -160,7 +160,7 @@ int cf_redp_int_tr(polynome* P, int p);
     |                                          6. OPERATIONS DANS F_p[X]                                             |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
- */
+*/
 /*  Stocker la somme A+B mod p dans P   */
 int cf_addp_mod(polynome* P, polynome* A, polynome* B, int p);
 
@@ -220,11 +220,16 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p);
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
-    |                                 7. INITIALISATION CORPS FINIS ET ELEMENTS                                      |
+    |                            7. INITIALISATION/GESTION CORPS FINIS ET ELEMENTS                                   |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
- */
-
+*/
+/*  Initialisation d'un corps fini F_q = F_p[X]/(f)    
+    Remarques:  - p doit être un nombre premier
+                - f doit être un polynome irréductible de F_p[X]
+    Retourne:   1 si echec
+                0 si réussi    */
+int cf_initcf_p(corpsfini* F, int p, polynome* f);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
@@ -232,7 +237,7 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p);
     |                            8. OPERATIONS DANS UN CORPS FINI F_q = F_p[X]/(f)                                   |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
- */
+*/
 int cardinal(int p, polynome* f);                                      // Renvoie q = card(F_q)
 polynome addition_Fq(polynome*, polynome*, int p, polynome* f);        // Addition dans F_q
 polynome multiplication_Fq(polynome*, polynome*, int p, polynome* f);  // Multiplication dans F_q
