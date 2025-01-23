@@ -2,14 +2,14 @@
 
 /*  Lib de travail polynomes/corps finis
     @nougzarm
-    
+
     Sommaire:
         (1. Structures - voir .h)
         2. Outils nombres entiers
         3. Initialisation de polynomes
         4. Gestion de polynomes
         5. Opérations dans Z[X]
-        6. Opérations dans F_p[X]
+        6. Opérations dans Z/pZ[X]
         7. Initialisation/gestion de corps finis
         8. Initialisation/gestion d'éléments de corps finis
         9. Opérations dans un corps fini
