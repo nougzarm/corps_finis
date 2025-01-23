@@ -64,13 +64,19 @@ int inverse_mod(int a, int p);
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
+/*  Remarque importante: suivant le cas où le polynome deja été utilisé ou non bien choisir entre initp et setp
+        initp : à utiliser lorsque le polynome n'a pas encore été initialisé
+        setp : à utiliser UNIQUEMENT lorsque le polynome a deja été initialisé via initp     */
+
 /*  Initialisation d'un polynôme P à 0  */
 void cf_initp_polynull(polynome* P);
+void cf_setp_polynull(polynome* P);
 
 /*  Initialisation d'un polynôme P à partir de Q   
     Retourne:   1 si l'initalisation a échoué (Q n'est pas correctement défini)
                 0 si la copie est réussie     */
-int cf_initp_copie(polynome* P);
+int cf_initp_copie(polynome* P, polynome* Q);
+int cf_setp_copie(polynome* P, polynome* Q);
 
 /*  Initialisation d'un polynome P par le monomme coeff*X^exp
     Retourne:   1 si l'initalisation a échoué (exp n'est pas positif)
@@ -80,7 +86,7 @@ int cf_initp_monome(polynome* P, int coeff, int exp);
 /*  Initialisation d'un polynome P à partir d'une liste de coefficients
     - La liste coefficient contient les coefficients (en commençant par le coefficient du degré constant)
     - Si degre = -1 alors P est initialisé à 0   */
-void cf_initp_liste(polynome* P, int* coeff, int degre);
+int cf_initp_liste(polynome* P, int* coeff, int degre);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
@@ -90,7 +96,7 @@ void cf_initp_liste(polynome* P, int* coeff, int degre);
     |----------------------------------------------------------------------------------------------------------------|
 */
 /*  Affichage d'un polynome P   */
-int afficherp(polynome* P);
+int cf_afficherp(polynome* P);
 
 /*  Libération de la mémoire occupée par un polynome P (libére la liste des coefficients)  */
 void viderp(polynome* P);
@@ -270,7 +276,7 @@ int cf_initEl_int(element* x, corpsfini* F, int n);
 int cf_initEl_copie(element* x, element* y);
 
 /*  Initialisation de x à 1 dans F  */
-int cf_initEl_unite(element* x);
+int cf_initEl_unite(element* x, corpsfini* F);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|

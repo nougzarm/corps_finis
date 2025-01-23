@@ -34,6 +34,10 @@ int main() {
 
     //  Initialisation des polynomes -------------------------------------------------
     polynome P, Q, f;
+    cf_initp_polynull(&P);
+    cf_initp_polynull(&P);
+    cf_initp_polynull(&P);
+    
     cf_initp_liste(&P, A, a);
     cf_initp_liste(&Q, B, b);
     cf_initp_liste(&f, C, c);
