@@ -81,25 +81,22 @@ int cf_inv_mod(int a, int p){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
-void cf_initp_polynull(polynome* P){
+int cf_initp_polynull(polynome* P){
     P->coeff = NULL;
     P->coeff = -1;
+    return 0;
 }
 
-void cf_setp_polynull(polynome* P){
+int cf_setp_polynull(polynome* P){
     if (P->coeff != NULL){
         free(P->coeff);
     }
-    cf_initp_polynull(P);
-    return;
+    return cf_initp_polynull(P);
 }
 
 int cf_initp_copie(polynome* P, polynome* Q){
-    // Si P est deja initialisé, on le vide
-    if(P->coeff != NULL){
-        free(P->coeff);
-    }
     if(Q->degre < -1){
+        cf_initp_polynull(P);   // Valeur par défaut
         return 1;   // Q n'est pas correctement défini
     }
     else if(Q->degre == -1){
@@ -116,12 +113,17 @@ int cf_initp_copie(polynome* P, polynome* Q){
     }
 }
 
-int cf_initp_monome(polynome* P, int coeff, int exp){
-    if(exp < 0){
-        return 1;   // Choisir un exposant positif
-    }
+int cf_setp_copie(polynome* P, polynome* Q){
     if(P->coeff != NULL){
         free(P->coeff);
+    }
+    return cf_initp_copie(P, Q);
+}
+
+int cf_initp_monome(polynome* P, int coeff, int exp){
+    if(exp < 0){
+        cf_setp_polynull(P);    // Valeur par défaut
+        return 1;   // Choisir un exposant positif
     }
     if(coeff == 0){
         cf_setp_polynull(P);
@@ -138,14 +140,18 @@ int cf_initp_monome(polynome* P, int coeff, int exp){
     }
 }
 
+int cf_setp_monom(polynome* P, int coeff, int exp){
+    if(P->coeff != NULL){
+        free(P->coeff);
+    }
+    return cf_initp_monome(P, coeff, exp);
+}
+
 // Initialisation d'un polynôme à partir d'une liste contenant les coefficients souhaités
 int cf_initp_liste(polynome* P, int* coeff, int degre){
     if(degre < 0){
+        cf_initp_polynull(P);   // Valeur par défaut
         return 1;   // Choisir un degré positif (ou utiliser initp_polynull pour degre = -1)
-    }
-    // Vider P si il est déjà initialisé
-    if(P->coeff != NULL){
-        free(P->coeff);
     }
     // Début de l'initialisation
     P->degre = degre;
@@ -154,6 +160,14 @@ int cf_initp_liste(polynome* P, int* coeff, int degre){
         P->coeff[i] = coeff[i];
     }
     return 0;   // Initialisation réussie
+}
+
+int cf_setp_liste(polynome* P, int* coeff, int degre){
+    // Vider P si il est déjà initialisé
+    if(P->coeff != NULL){
+        free(P->coeff);
+    }
+    return cf_initp_liste(P, coeff, degre);
 }
 
 

@@ -69,8 +69,8 @@ int inverse_mod(int a, int p);
         setp : à utiliser UNIQUEMENT lorsque le polynome a deja été initialisé via initp     */
 
 /*  Initialisation d'un polynôme P à 0  */
-void cf_initp_polynull(polynome* P);
-void cf_setp_polynull(polynome* P);
+int cf_initp_polynull(polynome* P);
+int cf_setp_polynull(polynome* P);
 
 /*  Initialisation d'un polynôme P à partir de Q   
     Retourne:   1 si l'initalisation a échoué (Q n'est pas correctement défini)
@@ -82,11 +82,13 @@ int cf_setp_copie(polynome* P, polynome* Q);
     Retourne:   1 si l'initalisation a échoué (exp n'est pas positif)
                 0 si l'initialisation   */
 int cf_initp_monome(polynome* P, int coeff, int exp);
+int cf_setp_monome(polynome* P, int coeff, int exp);
 
 /*  Initialisation d'un polynome P à partir d'une liste de coefficients
     - La liste coefficient contient les coefficients (en commençant par le coefficient du degré constant)
     - Si degre = -1 alors P est initialisé à 0   */
 int cf_initp_liste(polynome* P, int* coeff, int degre);
+int cf_setp_liste(polynome* P, int* coeff, int degre);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
