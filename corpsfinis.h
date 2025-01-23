@@ -101,9 +101,8 @@ void cf_flipp(polynome* r0, polynome* r1, polynome* r2);
 void scalaire_mod(int n, polynome* P, int p);               // P -> nP  (dans F_p[X])
 void scalaire_Fq(int n, polynome* P, int p, polynome* f);   // P -> nP  (dans F_q)
 void unitaire(polynome* P, int p);                          // P [p] -> P/CoeffDom(P) [p]
-polynome difference_etendu(polynome* A, polynome* Q, polynome* B);              // retourne A-QB   (dans Z[X])
-polynome difference_etendu_mod(polynome* A, polynome* Q, polynome* B, int p);   // retourne A-QB   (dans F_p[X])
-polynome surjection(polynome*, int p, polynome* f);                // Surjection Z[X] ->> F_p[X] ->> F_p[X]/(f)   
+
+polynome surjection(polynome*, int p, polynome* f);                // Surjection Z[X] ->> F_p[X] ->> F_p[X]/(f)
 polynome demi_surjection(polynome*, int p, polynome* f);           // Surjection F_p[X] ->> F_p[X]/(f)
 
 /*  |----------------------------------------------------------------------------------------------------------------|
@@ -148,6 +147,9 @@ int cf_mulp(polynome* P, polynome* A, polynome* B);
 /*  Transformation P <- P*A    */
 int cf_mulp_tr(polynome* P, polynome* A);
 
+/*  Stocker le polynome A-Q*B dans P    */
+int cf_diffetnd(polynome* P, polynome* A, polynome* Q, polynome* B);
+
 /*  Stocker le polynome A^exp dans P    */
 int cf_puissancep(polynome* P, polynome* A, int exp);
 
@@ -188,12 +190,15 @@ int cf_mulp_mod(polynome* P, polynome* A, polynome* B, int p);
 /*  Transformation P <- P*A mod p */
 int cf_mulp_mod_tr(polynome* P, polynome* A, int p);
 
+/*  Stocker le polynome A-Q*B mod p dans P    */
+int cf_diffetnd_mod(polynome* P, polynome* A, polynome* Q, polynome* B, int p);
+
 /*  Stocker la puissance A^exp mod p dans P   */
 int cf_puissancep_mod(polynome*P, polynome* A, int exp, int p);
 
 /*  Division euclidienne de A par B dans F_p[X] (i=0: quotient, i=1: reste)
     Stocke dans:    Quotient de la div. si i=0
-                    Reste de la div. si i=1   */
+                    Reste de la div. si i=1     */
 int cf_divp_mod(polynome* P, polynome* A, polynome* B, int p, int i);
 
 /*  Stocke PGCD(A, B) mod p dans P  */

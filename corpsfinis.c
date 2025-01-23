@@ -226,27 +226,6 @@ void unitaire(polynome* P, int p){
     return;
 }
 
-polynome difference_etendu(polynome* A, polynome* Q, polynome* B){
-    polynome S, S_inter;
-    S = multiplication(Q, B);
-    S_inter = soustraction(A, &S);
-    vider(&S);
-    S = copie(&S_inter);
-    vider(&S_inter);
-    return S;
-}
-
-polynome difference_etendu_mod(polynome* A, polynome* Q, polynome* B, int p){
-    polynome S, S_inter;
-    S = multiplication(Q, B);
-    S_inter = soustraction(A, &S);
-    vider(&S);
-    S = copie(&S_inter);
-    vider(&S_inter);
-    cf_redp_int_tr(&S, p);
-    return S;
-}
-
 // Surjection Z[X] ->> F_p[X] ->> F_p[X]/(f) 
 polynome surjection(polynome* P, int p, polynome* f){
     cf_redp_int_tr(P, p);
@@ -258,15 +237,6 @@ polynome surjection(polynome* P, int p, polynome* f){
 polynome demi_surjection(polynome* P, int p, polynome* f){
     polynome P_mod = division_euclid(P, f, p, 1);
     return P_mod;
-}
-
-void scalaire_Fq(int n, polynome* P, int p, polynome* f){
-    scalaire(n, P);
-    polynome P_inter = surjection(P, p, f);
-    vider(P);
-    *P = copie(&P_inter);
-    vider(&P_inter);
-    return;
 }
 
 
@@ -501,6 +471,14 @@ int cf_mulp_tr(polynome* P, polynome* A){
     }
 }
 
+int cf_diffetnd(polynome* P, polynome* A, polynome* Q, polynome* B){
+    polynome T;
+    cf_mulp(&T, Q, B);
+    cf_subp(P, A, &T);
+    cf_viderp(&T);
+    return 0;
+}
+
 int cf_puissancep(polynome* P, polynome* A, int exp){
     initp_polynull(P);
     if (exp == 0){
@@ -567,7 +545,6 @@ int cf_redp_int_tr(polynome* P, int p){
 }
 
 
-
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
     |                                          6. OPERATIONS DANS F_p[X]                                             |   
@@ -622,6 +599,12 @@ int cf_mulp_mod_tr(polynome* P, polynome* A, int p){
     return result;
 }
 
+int cf_diffetnd_mod(polynome* P, polynome* A, polynome* Q, polynome* B, int p){
+    cf_diffetnd(P, A, Q, B);
+    cf_redp_int_tr(P, p);
+    return 0;
+}
+
 int cf_puissancep_mod(polynome* P, polynome* A, int exp, int p){
     if(exp == 0){
         initp_monome(P, 1, 0);
@@ -650,7 +633,7 @@ int cf_divp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
         cf_redp_int_tr(&Q, p);
         cf_viderp(&M);
         cf_viderp(&R);
-        R = difference_etendu_mod(A, &Q, B, p);
+        cf_diffetnd_mod(&R, A, &Q, B, p);
     }
     if (i == 0){
         cf_viderp(&R);
@@ -706,17 +689,17 @@ int cf_bezoutp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
     polynome q;
     cf_divp_mod(&q, &r0, &r1, p, 0);
     
-    u2 = difference_etendu_mod(&u0, &q, &u1, p);
-    v2 = difference_etendu_mod(&v0, &q, &v1, p);
+    cf_diffetnd_mod(&u2, &u0, &q, &u1, p);
+    cf_diffetnd_mod(&v2, &v0, &q, &v1, p);
 
     while ( r2.degre != -1 ){
         flip(&r0, &r1, &r2);
         cf_divp_mod(&r2, &r0, &r1, p, 1);
         cf_divp_mod(&q, &r0, &r1, p, 0);
         cf_flipp(&u0, &u1, &u2);
-        u2 = difference_etendu_mod(&u0, &q, &u1, p);
+        cf_diffetnd_mod(&u2, &u0, &q, &u1, p);
         cf_flipp(&v0, &v1, &v2);
-        v2 = difference_etendu_mod(&v0, &q, &v1, p);
+        cf_diffetnd_mod(&v2, &v0, &q, &v1, p);
     }
     int C = r1.coeff[r1.degre];
     int C_inv = cf_inv_mod(C, p);
