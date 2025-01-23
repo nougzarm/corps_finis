@@ -1,6 +1,9 @@
 #include "corpsfinis.h"
 
-/*  Sommaire:
+/*  Lib de travail polynomes/corps finis
+    @nougzarm
+    
+    Sommaire:
         (1. Structures -voir .h)
         2. Outils nombres entiers
         3. Initialisation de polynomes
