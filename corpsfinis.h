@@ -294,9 +294,24 @@ int cf_opposeel_tr(element* x);
                 1 si echec (p.ex pas définis sur le même corps)*/
 int cf_subel(element* x, element* y, element* z);
 
+/*  Transformation x <- x-y
+    Retourne:   0 si réussi
+                1 si echec (p.ex pas définis sur le même corps)  */
+int cf_subel_tr(element* x, element* y);
 
+/*  Stocker le produit y*z dans x  
+    Retourne:   0 si réussi
+                1 si echec (p.ex pas définis sur le même corps)     */
+int cf_mulel(element* x, element* y, element* z);
 
-polynome multiplication_Fq(polynome*, polynome*, int p, polynome* f);  // Multiplication dans F_q
+/*  Transformation x <- x*y dans F
+    Retourne:   0 si réussi
+                1 si echec (p.ex pas définis sur le même corps)  */
+int cf_mulel_tr(element* x, element* y);
+
+/*  Stocker y^exp dans x */
+int cf_puissanceel(element* x, element* y, int exp);
+
 polynome puissance_Fq(polynome*, int exposant, int p, polynome* f);    // Puissance dans F_q
 polynome inverse(polynome*, int p, polynome* f);                       // Renvoie l'inverse d'un elt dans F_q
 polynome division(polynome*, polynome*, int p, polynome* f);           // Division dans F_q

@@ -885,11 +885,35 @@ int cf_subel(element* x, element* y, element* z){
     return 0;
 }
 
-polynome multiplication_Fq(polynome* A, polynome* B, int p, polynome* f){
-    polynome P_inter = multiplication_mod(A, B, p);
-    polynome P = demi_surjection(&P_inter, p, f);
-    vider(&P_inter);
-    return P;
+int cf_subel_tr(element* x, element* y){
+    if (cf_comparcf(x->corps, y->corps) == 0){
+        return 1;   // x et y ne sont pas définis sur le même corps
+    }
+    element t;
+    cf_initel_copie(&t, y);
+    cf_addel_tr(x, &t);
+    cf_viderel(&t);
+    return 0;
+}
+
+int cf_mulel(element* x, element* y, element* z){
+    if (cf_comparcf(y->corps, z->corps) == 0){
+        return 1;   // y et z ne sont pas définis sur le même corps
+    }
+    cf_viderel(x);
+    x->corps = y->corps;
+    cf_mulp_mod(x->representation, y->representation, z->representation, x->corps->car);
+    cf_redp_pol_tr(x->representation, &(x->corps->relation), x->corps->car);
+    return 0;
+}
+
+int cf_mulel_tr(element* x, element* y){
+    if (cf_comparcf(x->corps, y->corps) == 0){
+        return 1;   // x et y ne sont pas définis sur le même corps
+    }
+    cf_mulp_mod_tr(x->representation, y->representation, x->corps->car);
+    cf_redp_pol_tr(x->representation, &(x->corps->relation), x->corps->car);
+    return 0;
 }
 
 polynome puissance_Fq(polynome* A, int exposant, int p, polynome* f){
