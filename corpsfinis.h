@@ -227,10 +227,13 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p);
 /*  Initialisation d'un corps fini F_q = F_p[X]/(f)    
     Remarques:  - p doit être un nombre premier
                 - f doit être un polynome irréductible de F_p[X]
+                - Pour définir F_q = F_p = Z/pZ, on peut choisir f = X (voir fonction init suivante)
     Retourne:   1 si echec
                 0 si réussi    */
-int cf_initcf_p(corpsfini* F, int p, polynome* f);
+int cf_initcf_pol(corpsfini* F, int p, polynome* f);
 
+/*  Initialisation d'un corps fini F_q = F_p = Z/pZ    */
+int cf_initcf_int(corpsfini* F, int p);
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|

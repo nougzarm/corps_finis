@@ -734,7 +734,7 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
-int cf_initcf_p(corpsfini* F, int p, polynome* f){
+int cf_initcf_pol(corpsfini* F, int p, polynome* f){
     if (p < 2){
         return 1;   // p doit être un nombre premier
     }
@@ -743,6 +743,15 @@ int cf_initcf_p(corpsfini* F, int p, polynome* f){
     }
     F->car = p;
     cf_initp_copie(&F->relation, f);
+    return 0;   // Initialisation réussie
+}
+
+int cf_initcf_int(corpsfini* F, int p){
+    if (p < 2){
+        return 1;   // p doit être un nombre premier
+    }
+    F->car = p;
+    cf_initp_monome(&F->relation, 1, 1);
     return 0;   // Initialisation réussie
 }
 
