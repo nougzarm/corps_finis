@@ -122,11 +122,11 @@ int cf_setp_copie(polynome* P, polynome* Q){
 
 int cf_initp_monome(polynome* P, int coeff, int exp){
     if(exp < 0){
-        cf_setp_polynull(P);    // Valeur par défaut
+        cf_initp_polynull(P);    // Valeur par défaut
         return 1;   // Choisir un exposant positif
     }
     if(coeff == 0){
-        cf_setp_polynull(P);
+        cf_initp_polynull(P);
         return 0;   // P <- 0
     }
     else{
@@ -140,7 +140,7 @@ int cf_initp_monome(polynome* P, int coeff, int exp){
     }
 }
 
-int cf_setp_monom(polynome* P, int coeff, int exp){
+int cf_setp_monome(polynome* P, int coeff, int exp){
     if(P->coeff != NULL){
         free(P->coeff);
     }
@@ -495,6 +495,7 @@ int cf_mulp_tr(polynome* P, polynome* A){
 
 int cf_diffetnd(polynome* P, polynome* A, polynome* Q, polynome* B){
     polynome T;
+    cf_initp_polynull(&T);
     cf_mulp(&T, Q, B);
     cf_subp(P, A, &T);
     cf_viderp(&T);
@@ -514,6 +515,7 @@ int cf_puissancep(polynome* P, polynome* A, int exp){
     else {
         cf_initp_copie(P, A);
         polynome T;
+        cf_initp_polynull(&T);
         for (int i = 2; i<=exp; i++){
             cf_mulp(&T, P, A);
             cf_initp_copie(P, &T);
@@ -647,24 +649,25 @@ int cf_divp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
     cf_redp_int_tr(A, p);
     cf_redp_int_tr(B, p);
     polynome Q, M, R;
-    cf_setp_polynull(&Q);
+    cf_initp_polynull(&Q);
+    cf_initp_polynull(&M);
     cf_initp_copie(&R, A);
     while ( R.degre >= B->degre ) {
-        cf_initp_monome(&M, R.coeff[R.degre] * cf_inv_mod(B->coeff[B->degre], p), R.degre - B->degre );
+        cf_setp_monome(&M, R.coeff[R.degre] * cf_inv_mod(B->coeff[B->degre], p), R.degre - B->degre );
         cf_addp_tr(&Q, &M);
         cf_redp_int_tr(&Q, p);
-        cf_viderp(&M);
-        cf_viderp(&R);
         cf_diffetnd_mod(&R, A, &Q, B, p);
     }
     if (i == 0){
         cf_viderp(&R);
+        cf_viderp(&M);
         cf_initp_copie(P, &Q);
         cf_viderp(&Q);
         return 0;
     }
     else {
         cf_viderp(&Q);
+        cf_viderp(&M);
         cf_initp_copie(P, &R);
         cf_viderp(&R);
         return 0;
@@ -825,32 +828,63 @@ int cf_viderEl(element* x){
     return 0;
 };
 
-int cf_initEl_pol(element* x, corpsfini* F, polynome* P){
-    cf_viderEl(x);
+int cf_initEl_null(element* x, corpsfini* F){
     x->corps = F;
+    cf_initp_polynull(&x->representation);
+    return 0;
+}
+
+int cf_setEl_null(element* x, corpsfini* F){
+    cf_viderEl(x);
+    return cf_initEl_null(x, F);
+}
+
+int cf_initEl_pol(element* x, corpsfini* F, polynome* P){
+    x->corps = F;
+    cf_initp_polynull(&x->representation);
     cf_redp_pol(&x->representation, P, &F->relation, F->car);
     return 0;   // Initialisation réussie
 }
 
-int cf_initEl_int(element* x, corpsfini* F, int n){
+int cf_setEl_pol(element* x, corpsfini* F, polynome* P){   
     cf_viderEl(x);
+    return cf_initEl_pol(x, F, P);
+}
+
+int cf_initEl_int(element* x, corpsfini* F, int n){
     x->corps = F;
+    cf_initp_polynull(&x->representation);
     cf_initp_monome(&x->representation, n, 1);
     return 0;
 }
 
-int cf_initEl_copie(element* x, element* y){
+int cf_setEl_int(element* x, corpsfini* F, int n){
     cf_viderEl(x);
+    return cf_initEl_int(x, F, n);
+}
+
+int cf_initEl_copie(element* x, element* y){
     x->corps = y->corps;
+    cf_initp_polynull(&x->representation);
     cf_initp_copie(&x->representation, &y->representation);
     return 0;
 }
 
-int cf_initEl_unite(element* x, corpsfini* F){
+int cf_setEl_copie(element* x, element* y){
     cf_viderEl(x);
+    return cf_initEl_copie(x, y);
+}
+
+int cf_initEl_unite(element* x, corpsfini* F){
     x->corps = F;
+    cf_initp_polynull(&x->representation);
     cf_initp_monome(&x->representation, 1, 0);
     return 0;
+}
+
+int cf_setEl_unite(element* x, corpsfini* F){
+    cf_viderEl(x);
+    return cf_initEl_unite(x, F);
 }
 
 
@@ -982,6 +1016,7 @@ int cf_divEl_tr(element* x, element* y){
         return 1;
     }
     element t;
+    cf_initEl_null(&t, x->corps);
     cf_invEl(&t, y);
     cf_mulEl_tr(x, &t);
     cf_viderEl(&t);
@@ -997,11 +1032,13 @@ int cf_ordreEl(element* x){
     }
     int ord = 2;
     element pdt;
+    cf_initEl_null(&pdt, x->corps);
     cf_mulEl(&pdt, x, x);
     while(pdt.representation.degre != 0 || pdt.representation.coeff[0] != 1){
         cf_mulEl_tr(&pdt, x);
         ord++;
     }
+    cf_viderEl(&pdt);
     return ord;
 }
 

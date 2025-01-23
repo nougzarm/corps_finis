@@ -268,18 +268,26 @@ int cf_comparcf(corpsfini* F, corpsfini* K);
 /*  Libération de la mémoire occupée par un element x d'un corps fini    */
 int cf_viderEl(element* x);
 
+/*  Initialisation d'un élément x = 0 dans F   */
+int cf_initEl_null(element* x, corpsfini* F);
+int cf_setEl_null(element* x, corpsfini* F);
+
 /*  Initialisation d'un élément de F via sa forme polynomiale P
     Remarque: penser à vider x AINSI que P après avoir fini   */
 int cf_initEl_pol(element* x, corpsfini* F, polynome* P);
+int cf_setEl_pol(element* x, corpsfini* F, polynome* P);
 
 /*  Initialisation de x=n (utile lorsque F est de la forme Z/pZ)   */
 int cf_initEl_int(element* x, corpsfini* F, int n);
+int cf_setEl_int(element* x, corpsfini* F, int n);
 
 /*  Initialisation d'un élément de x en y stockant une copie de y   */
 int cf_initEl_copie(element* x, element* y);
+int cf_setEl_copie(element* x, element* y);
 
 /*  Initialisation de x à 1 dans F  */
 int cf_initEl_unite(element* x, corpsfini* F);
+int cf_setEl_unite(element* x, corpsfini* F);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
