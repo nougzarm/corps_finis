@@ -92,6 +92,12 @@ void viderp(polynome* P);
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
  */
+/*  Echange les polynomes P et Q    */
+void cf_swapp(polynome* P, polynome* Q);
+
+/*  Stocke: r0 <- r1 et r1 <- r2 (et vide r2)   */
+void cf_flipp(polynome* r0, polynome* r1, polynome* r2);
+
 void scalaire_mod(int n, polynome* P, int p);               // P -> nP  (dans F_p[X])
 void scalaire_Fq(int n, polynome* P, int p, polynome* f);   // P -> nP  (dans F_q)
 void unitaire(polynome* P, int p);                          // P [p] -> P/CoeffDom(P) [p]

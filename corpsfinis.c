@@ -197,6 +197,20 @@ void cf_viderp(polynome* P){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|                                                     
  */
+void cf_swapp(polynome* P, polynome* Q){
+    polynome T;
+    cf_initp_copie(&T, P);
+    cf_initp_copie(P, Q);
+    cf_initp_copie(Q, &T);
+    cf_viderp(&T);
+}
+
+void cf_flipp(polynome* r0, polynome* r1, polynome* r2){
+    cf_initp_copie(r0, r1);
+    cf_initp_copie(r1, r2);
+    cf_viderp(r2);
+    return;
+}
 
 void scalaire_mod(int n, polynome* P, int p){
     scalaire(n, P);
@@ -206,7 +220,7 @@ void scalaire_mod(int n, polynome* P, int p){
 
 void unitaire(polynome* P, int p){
     int C = P->coeff[P->degre];     // coeff dominant de P
-    int C_inv = cf_inv_mod(C, p);  // son inverse
+    int C_inv = cf_inv_mod(C, p);   // son inverse
     scalaire(C_inv, P);
     cf_redp_int_tr(P, p);
     return;
@@ -233,23 +247,6 @@ polynome difference_etendu_mod(polynome* A, polynome* Q, polynome* B, int p){
     return S;
 }
 
-void ajout(polynome* A, polynome* B){
-    polynome S = addition(A, B);
-    vider(A);
-    *A = copie(&S);
-    vider(&S);
-    return;
-}
-
-static void swap(polynome* P, polynome* Q){
-    polynome R = copie(P);
-    vider(P);
-    *P = copie(Q);
-    vider(Q);
-    *Q = copie(&R);
-    vider(&R);
-}
-
 // Surjection Z[X] ->> F_p[X] ->> F_p[X]/(f) 
 polynome surjection(polynome* P, int p, polynome* f){
     cf_redp_int_tr(P, p);
@@ -271,19 +268,6 @@ void scalaire_Fq(int n, polynome* P, int p, polynome* f){
     vider(&P_inter);
     return;
 }
-
-static void flip(polynome* r0, polynome* r1, polynome* r2){
-    vider(r0);
-    *r0 = copie(r1);
-    vider(r1);
-    *r1 = copie(r2);
-    vider(r2);
-    return;
-}
-
-
-
-
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
@@ -729,9 +713,9 @@ int cf_bezoutp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
         flip(&r0, &r1, &r2);
         cf_divp_mod(&r2, &r0, &r1, p, 1);
         cf_divp_mod(&q, &r0, &r1, p, 0);
-        flip(&u0, &u1, &u2);
+        cf_flipp(&u0, &u1, &u2);
         u2 = difference_etendu_mod(&u0, &q, &u1, p);
-        flip(&v0, &v1, &v2);
+        cf_flipp(&v0, &v1, &v2);
         v2 = difference_etendu_mod(&v0, &q, &v1, p);
     }
     int C = r1.coeff[r1.degre];
