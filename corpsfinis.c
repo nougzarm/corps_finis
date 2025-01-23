@@ -799,31 +799,38 @@ int cf_comparcf(corpsfini* F, corpsfini* K){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
-int cf_viderel(element* x){
+int cf_viderEl(element* x){
     cf_viderp(&x->representation);
     x->corps = NULL;
     return 0;
 };
 
-int cf_initel_pol(element* x, corpsfini* F, polynome* P){
-    cf_viderel(x);
+int cf_initEl_pol(element* x, corpsfini* F, polynome* P){
+    cf_viderEl(x);
     x->corps = F;
     cf_redp_pol(&x->representation, P, &F->relation, F->car);
     return 0;   // Initialisation réussie
 }
 
-int cf_initel_int(element* x, corpsfini* F, int n){
-    cf_viderel(x);
+int cf_initEl_int(element* x, corpsfini* F, int n){
+    cf_viderEl(x);
     x->corps = F;
     cf_initp_monome(&x->representation, n, 1);
     return 0;
 }
 
-int cf_initel_copie(element* x, element* y){
-    cf_viderel(x);
+int cf_initEl_copie(element* x, element* y){
+    cf_viderEl(x);
     x->corps = y->corps;
     cf_initp_copie(x->representation, y->representation);
     return 0;
+}
+
+int cf_initEl_unite(element* x, corpsfini* F){
+    cf_viderEl(x);
+    x->corps = F;
+    cf_initp_monome(x->representation, 1, 0);
+    return 0
 }
 
 
@@ -833,11 +840,11 @@ int cf_initel_copie(element* x, element* y){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
-int cf_addel(element* x, element* y, element* z){
+int cf_addEl(element* x, element* y, element* z){
     if (cf_comparcf(y->corps, z->corps) == 0){
         return 1;   // y et z ne sont pas définis sur le même corps
     }
-    cf_viderel(x);
+    cf_viderEl(x);
     // Données du corps fini
     corpsfini* corps = y->corps;
     int p = corps->car;
@@ -849,7 +856,7 @@ int cf_addel(element* x, element* y, element* z){
     return 0;
 }
 
-int cf_addel_tr(element* x, element* y){
+int cf_addEl_tr(element* x, element* y){
     if (cf_comparcf(x->corps, y->corps) == 0){
         return 1;   // x et y ne sont pas définis sur le même corps
     }
@@ -860,28 +867,28 @@ int cf_addel_tr(element* x, element* y){
     return 0;
 }
 
-int cf_opposeel(element* x, element* y){
-    cf_viderel(x);
+int cf_opposeEl(element* x, element* y){
+    cf_viderEl(x);
     x->corps = y->corps;
     cf_opposep_mod(x->representation, y->representation, x->corps->car);
     return 0;
 }
 
-int cf_opposeel_tr(element* x){
+int cf_opposeEl_tr(element* x){
     cf_opposep_mod_tr(x->representation, x->corps->car);
     return 0;
 }
 
-int cf_subel(element* x, element* y, element* z){
+int cf_subEl(element* x, element* y, element* z){
     if (cf_comparcf(y->corps, z->corps) == 0){
         return 1;   // y et z ne sont pas définis sur le même corps
     }
-    cf_viderel(x);
+    cf_viderEl(x);
     element t;
-    cf_initel_copie(&t, z);
-    cf_opposeel(&t, z);
-    cf_addel(x, y, &t);
-    cf_viderel(&t);
+    cf_initEl_copie(&t, z);
+    cf_opposeEl(&t, z);
+    cf_addEl(x, y, &t);
+    cf_viderEl(&t);
     return 0;
 }
 
@@ -890,29 +897,38 @@ int cf_subel_tr(element* x, element* y){
         return 1;   // x et y ne sont pas définis sur le même corps
     }
     element t;
-    cf_initel_copie(&t, y);
-    cf_addel_tr(x, &t);
-    cf_viderel(&t);
+    cf_initEl_copie(&t, y);
+    cf_addEl_tr(x, &t);
+    cf_viderEl(&t);
     return 0;
 }
 
-int cf_mulel(element* x, element* y, element* z){
+int cf_mulEl(element* x, element* y, element* z){
     if (cf_comparcf(y->corps, z->corps) == 0){
         return 1;   // y et z ne sont pas définis sur le même corps
     }
-    cf_viderel(x);
+    cf_viderEl(x);
     x->corps = y->corps;
     cf_mulp_mod(x->representation, y->representation, z->representation, x->corps->car);
     cf_redp_pol_tr(x->representation, &(x->corps->relation), x->corps->car);
     return 0;
 }
 
-int cf_mulel_tr(element* x, element* y){
+int cf_mulEl_tr(element* x, element* y){
     if (cf_comparcf(x->corps, y->corps) == 0){
         return 1;   // x et y ne sont pas définis sur le même corps
     }
     cf_mulp_mod_tr(x->representation, y->representation, x->corps->car);
     cf_redp_pol_tr(x->representation, &(x->corps->relation), x->corps->car);
+    return 0;
+}
+
+int cf_puissanceEl(element* x, element* y, int exp){
+    cf_viderEl(x);
+    cf_initEl_unite(x, y->corps);
+    for (int i = 1; i <= exp; i++){
+        cf_mulel_tr(x, y);
+    }
     return 0;
 }
 
@@ -939,18 +955,40 @@ polynome puissance_Fq(polynome* A, int exposant, int p, polynome* f){
     }
 }
 
-polynome inverse(polynome* P, int p, polynome* f){
-    polynome P_inter = surjection(P, p, f);
-    polynome u = algo_euclide_etendu(f, &P_inter, p, 1);
-    vider(&P_inter);
-    return u;
+int cf_invEl(element* x, element* y){
+    if (y->representation.degre == -1){
+        return 1;   // y est nul donc non inversible
+    }
+    cf_viderEl(x);
+    x->corps = y->corps;
+    cf_bezoutp_mod(x->representation, &x->corps->relation, y, x->corps->car, 1);
+    return 0
 }
 
-polynome division(polynome* A, polynome* B, int p, polynome* f){
-    polynome B_inv = inverse(B, p, f);
-    polynome D = multiplication_Fq(A, &B_inv, p, f);
-    vider(&B_inv);
-    return D;
+int cf_divEl(element* x, element* y, element* z){
+    if (z->representation.degre == -1){
+        return 1;
+    }
+    if (cf_comparcf(y->corps, z->corps) == 0){
+        return 1;
+    }
+    cf_invEl(x, z);
+    cf_mulEl_tr(x, y);
+    return 0;
+}
+
+int cf_divEl_tr(element* x, element* y){
+    if (y->representation.degre == -1){
+        return 1;
+    }
+    if (cf_comparcf(x->corps, y->corps) == 0){
+        return 1;
+    }
+    element t;
+    cf_invEl(&t, y);
+    cf_mulEl_tr(x, &t);
+    cf_viderEl(&t);
+    return 0;
 }
 
 int ordre(polynome* P, int p, polynome* f){

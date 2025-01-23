@@ -254,17 +254,20 @@ int cf_comparcf(corpsfini* F, corpsfini* K);
     |----------------------------------------------------------------------------------------------------------------|
 */
 /*  Libération de la mémoire occupée par un element x d'un corps fini    */
-int cf_viderel(element* x);
+int cf_viderEl(element* x);
 
 /*  Initialisation d'un élément de F via sa forme polynomiale P
     Remarque: penser à vider x AINSI que P après avoir fini   */
-int cf_initel_pol(element* x, corpsfini* F, polynome* P);
+int cf_initEl_pol(element* x, corpsfini* F, polynome* P);
 
 /*  Initialisation de x=n (utile lorsque F est de la forme Z/pZ)   */
-int cf_initel_int(element* x, corpsfini* F, int n);
+int cf_initEl_int(element* x, corpsfini* F, int n);
 
 /*  Initialisation d'un élément de x en y stockant une copie de y   */
-int cf_initel_copie(element* x, element* y);
+int cf_initEl_copie(element* x, element* y);
+
+/*  Initialisation de x à 1 dans F  */
+int cf_initEl_unite(element* x);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
@@ -276,45 +279,57 @@ int cf_initel_copie(element* x, element* y);
 /*  Stocker la somme y+z dans x 
     Retourne:   0 si réussi
                 1 si echec (p.ex pas définis sur le même corps)*/
-int cf_addel(element* x, element* y, element* z);
+int cf_addEl(element* x, element* y, element* z);
 
 /*  Transformation x <- y dans F 
     Retourne:   0 si réussi
                 1 si echec (p.ex pas définis sur le même corps) */
-int cf_addel_tr(element* x, element* y);
+int cf_addEl_tr(element* x, element* y);
 
 /*  Stocker l'opposé -y dans x  */
-int cf_opposeel(element* x, element* y);
+int cf_opposeEl(element* x, element* y);
 
 /*  Transformation x <- -x  */
-int cf_opposeel_tr(element* x);
+int cf_opposeEl_tr(element* x);
 
 /*  Stocker la différence y-z dans x 
     Retourne:   0 si réussi
                 1 si echec (p.ex pas définis sur le même corps)*/
-int cf_subel(element* x, element* y, element* z);
+int cf_subEl(element* x, element* y, element* z);
 
 /*  Transformation x <- x-y
     Retourne:   0 si réussi
                 1 si echec (p.ex pas définis sur le même corps)  */
-int cf_subel_tr(element* x, element* y);
+int cf_subEl_tr(element* x, element* y);
 
 /*  Stocker le produit y*z dans x  
     Retourne:   0 si réussi
                 1 si echec (p.ex pas définis sur le même corps)     */
-int cf_mulel(element* x, element* y, element* z);
+int cf_mulEl(element* x, element* y, element* z);
 
 /*  Transformation x <- x*y dans F
     Retourne:   0 si réussi
                 1 si echec (p.ex pas définis sur le même corps)  */
-int cf_mulel_tr(element* x, element* y);
+int cf_mulEl_tr(element* x, element* y);
 
 /*  Stocker y^exp dans x */
-int cf_puissanceel(element* x, element* y, int exp);
+int cf_puissanceEl(element* x, element* y, int exp);
 
-polynome puissance_Fq(polynome*, int exposant, int p, polynome* f);    // Puissance dans F_q
-polynome inverse(polynome*, int p, polynome* f);                       // Renvoie l'inverse d'un elt dans F_q
-polynome division(polynome*, polynome*, int p, polynome* f);           // Division dans F_q
+/*  Stocker y^-1 dans x
+    Retourne:   0 si réussi
+                1 si echec (p.ex y n'est pas inversible)     */
+int cf_invEl(element* x, element* y);
+
+/*  Stocker le quotient y/z dans x  
+    Retourne:   0 si réussi
+                1 si echec (p.ex z non inversible ou != corps) */
+int cf_divEl(element* x, element* y, element* z);
+
+/*  Transformation x <- x/y 
+    Retourn:    0 si réussi
+                1 si echec (p.ex y non inversible ou != corps)  */
+int cf_divEl_tr(element* x, element* y);
+
 int ordre(polynome* P, int p, polynome* f);                            // Ordre de P dans F_q
 int verif_generateur(polynome* P, int p, polynome* f);                 // Verifie si P est générateur de F_q*
 
