@@ -101,7 +101,7 @@ int cf_setp_liste(polynome* P, int* coeff, int degre);
 int cf_afficherp(polynome* P);
 
 /*  Libération de la mémoire occupée par un polynome P (libére la liste des coefficients)  */
-void viderp(polynome* P);
+void cf_viderp(polynome* P);
 
 /*  Echange les polynomes P et Q    */
 void cf_swapp(polynome* P, polynome* Q);

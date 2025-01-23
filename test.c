@@ -34,10 +34,7 @@ int main() {
 
     //  Initialisation des polynomes -------------------------------------------------
     polynome P, Q, f;
-    cf_initp_polynull(&P);
-    cf_initp_polynull(&P);
-    cf_initp_polynull(&P);
-    
+
     cf_initp_liste(&P, A, a);
     cf_initp_liste(&Q, B, b);
     cf_initp_liste(&f, C, c);
@@ -45,7 +42,6 @@ int main() {
     //  Initialisation du corps F_p[X]/(f)
     corpsfini F;
     cf_initcf_pol(&F, p, &f);
-
     //  Initialisation des éléments de F
 
 

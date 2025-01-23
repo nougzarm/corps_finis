@@ -16,6 +16,6 @@ corpsfinis.o: corpsfinis.c corpsfinis.h
 	$(CC) $(CPFLAGS) -c corpsfinis.c
 
 clean:
-	rm -f $(OBJS)
+	rm -f $(OBJS) test
 
 

@@ -208,8 +208,7 @@ int cf_afficherp(polynome* P){
 void cf_viderp(polynome* P){
     if (P->coeff != NULL){
         free(P->coeff);
-        P->degre = -1;
-        P->coeff = NULL;
+        cf_initp_polynull(P);
     }
 }
 
@@ -781,7 +780,6 @@ int cf_initcf_pol(corpsfini* F, int p, polynome* f){
     if (f->degre < 0){
         return 1;   // f ne doit pas être nul
     }
-    cf_vidercf(F);
     F->car = p;
     cf_initp_copie(&F->relation, f);
     return 0;   // Initialisation réussie
@@ -791,7 +789,6 @@ int cf_initcf_int(corpsfini* F, int p){
     if (p < 2){
         return 1;   // p doit être un nombre premier
     }
-    cf_vidercf(F);
     F->car = p;
     cf_initp_monome(&F->relation, 1, 1);
     return 0;   // Initialisation réussie
