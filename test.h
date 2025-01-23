@@ -3,6 +3,6 @@
 
 #include "corpsfinis.h"
 
-void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f);
+void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f, corpsfini* F);
 
 #endif // TEST_INCLUDED

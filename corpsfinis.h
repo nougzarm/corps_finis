@@ -100,7 +100,8 @@ int cf_setp_liste(polynome* P, int* coeff, int degre);
 /*  Affichage d'un polynome P   */
 int cf_afficherp(polynome* P);
 
-/*  Libération de la mémoire occupée par un polynome P (libére la liste des coefficients)  */
+/*  Libération de la mémoire occupée par un polynome P (libére la liste des coefficients)
+    Remarque: Utiliser cette fonction uniquement si P a été initialisé (p.ex avec une fonction initp)  */
 void cf_viderp(polynome* P);
 
 /*  Echange les polynomes P et Q    */

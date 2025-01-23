@@ -21,16 +21,16 @@
 
 int main() {
     //  CHOIX DU TEST À EFFECTUER ----------------------------------------------------
-    int choix_test = 8;
+    int choix_test = 1;
 
     //  CONFIGURATION ----------------------------------------------------------------
     int p = 3;
     int A[] = {0, 1, 5, 6, 0, 1};   //  polynome P   (Placer le coeff dominant en fin de liste)
     int B[] = {1, 0, 1, 2, 2};      //  polynome Q   
     int C[] = {1, 0, 1};            //  polynome f   (Irréductible dans F_p[X])
-    int a = sizeof(A)/sizeof(int); 
-    int b = sizeof(B)/sizeof(int); 
-    int c = sizeof(C)/sizeof(int);
+    int a = sizeof(A)/sizeof(int)-1; 
+    int b = sizeof(B)/sizeof(int)-1; 
+    int c = sizeof(C)/sizeof(int)-1;
 
     //  Initialisation des polynomes -------------------------------------------------
     polynome P, Q, f;
@@ -51,10 +51,9 @@ int main() {
     printf(" - Polynome irréductible dans F_%d[X] : f = ", p); cf_afficherp(&f); 
     printf("\n - P = "); cf_afficherp(&P);
     printf("\n - Q = "); cf_afficherp(&Q); printf("\n\n");
-    
-    test(choix_test, &P, &Q, p, &f); 
-    printf("----------------------------------------------------------------- \n");
 
+    test(choix_test, &P, &Q, p, &f, &F); 
+    printf("----------------------------------------------------------------- \n");
     //  Libération de la mémoire -----------------------------------------------------
     cf_viderp(&P);
     cf_viderp(&Q);
@@ -65,20 +64,24 @@ int main() {
 
 
 
-void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f){
-/* 
+void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f, corpsfini* F){
+
     if(choix_test == 0){
-        polynome S = addition(P, Q);
-        printf("Dans Z[X],  P + Q = "); afficher(&S); printf("\n");
-        vider(&S);
+        polynome S;
+        cf_initp_polynull(&S);
+        cf_addp(&S, P, Q);
+        printf("Dans Z[X],  P + Q = "); cf_afficherp(&S); printf("\n");
+        cf_viderp(&S);
     }
 
     else if(choix_test == 1){
-        polynome S = soustraction(P, Q);
-        printf("Dans Z[X],  P - Q = "); afficher(&S); printf("\n");
-        vider(&S);
+        polynome S;
+        cf_initp_polynull(&S);
+        cf_subp(&S, P, Q);
+        printf("Dans Z[X],  P - Q = "); cf_afficherp(&S); printf("\n");
+        cf_viderp(&S);
     }
-
+/* 
     else if(choix_test == 2){
         polynome S = addition(P, Q);
         modulo_transfo(&S, p);

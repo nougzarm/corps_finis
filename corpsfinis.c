@@ -83,7 +83,7 @@ int cf_inv_mod(int a, int p){
 */
 int cf_initp_polynull(polynome* P){
     P->coeff = NULL;
-    P->coeff = -1;
+    P->degre = -1;
     return 0;
 }
 
@@ -422,6 +422,7 @@ int cf_opposep_tr(polynome* P){
 int cf_subp(polynome* P, polynome* A, polynome* B){
     cf_setp_polynull(P);
     polynome T;
+    cf_initp_polynull(&T);
     cf_opposep(&T, B);
     cf_addp(P, A, &T);
     cf_viderp(&T);
@@ -430,6 +431,7 @@ int cf_subp(polynome* P, polynome* A, polynome* B){
 
 int cf_subp_tr(polynome* P, polynome* A){
     polynome T;
+    cf_initp_polynull(&T);
     cf_opposep(&T, A);
     cf_addp_tr(P, &T);
     cf_viderp(&T);
