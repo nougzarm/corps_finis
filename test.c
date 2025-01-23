@@ -12,16 +12,16 @@
     7 : Affiche le PGCD de P et Q (dans F_p[X])
     8 : Affiche la formule de Bezout entre P et Q dans F_p[X]
     9 : Affiche la réduction de P et Q dans F_q
-    10 : Affiche le produit de P et Q dans F_q
-    11 : Affiche l'inverse de P dans F_q
+    10 : Affiche le produit de x et y dans F
+    11 : Affiche l'inverse de x dans F
     12 : Affiche le quotient de P par Q dans F_q
-    13 : Affiche l'ordre de P dans F_q
+    13 : Affiche l'ordre de x dans F
     14 : Affiche si P est générateur de F_q
 */
 
 int main() {
     //  CHOIX DU TEST À EFFECTUER ----------------------------------------------------
-    int choix_test = 9;
+    int choix_test = 14;
 
     //  CONFIGURATION ----------------------------------------------------------------
     int p = 3;
@@ -47,10 +47,15 @@ int main() {
 
     //  Affichage et déroulement du test ---------------------------------------------
     printf("----------------------------------------------------------------- \n");
-    printf("Définitions :\n - Premier p = %d \n", p);
-    printf(" - Polynome irréductible dans F_%d[X] : f = ", p); cf_afficherp(&f); 
+    printf("Définitions :");
     printf("\n - P = "); cf_afficherp(&P);
-    printf("\n - Q = "); cf_afficherp(&Q); printf("\n\n");
+    printf("\n - Q = "); cf_afficherp(&Q); 
+    printf("\n\n - Nombre premier p = %d \n", p);
+    printf(" - Polynome irréductible dans Z/%dZ[X] : f = ", p); cf_afficherp(&f); 
+    printf("\n - Corps fini : F = F_%d = Z/%dZ[X]/(f) \n", puissance(p, f.degre), p);
+    
+    printf(" - Soit x (resp. y) l'image de P (resp. de Q) dans F");
+    printf("\n\n");
 
     test(choix_test, &P, &Q, p, &f, &F); 
     printf("----------------------------------------------------------------- \n");
@@ -154,45 +159,68 @@ void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f, corpsfin
         cf_initp_polynull(&P_red); cf_initp_polynull(&Q_red);
         cf_redp_pol(&P_red, P, f, p);
         cf_redp_pol(&Q_red, Q, f, p);
-        printf("L'image de P dans F_%d est : ", puissance(p, f->degre)); cf_afficherp(&P_red); printf("\n");
-        printf("L'mage de Q dans F_%d est : ", puissance(p, f->degre)); cf_afficherp(&Q_red); printf("\n");
+        printf("Résultat : \n");
+        printf("L'image de P dans F_%d est: x = ", puissance(p, f->degre)); cf_afficherp(&P_red); printf("\n");
+        printf("L'mage de Q dans F_%d est: y = ", puissance(p, f->degre)); cf_afficherp(&Q_red); printf("\n");
         cf_viderp(&P_red);
         cf_viderp(&Q_red);
     }
-/*
+
     else if(choix_test == 10) {
-        polynome T;
-        cf_initp_polynull(&T);
-        polynome PDT = multiplication_Fq(P, Q, p, f);
-        printf("Dans F_%d,  P*Q = ", q); afficher(&PDT); printf("\n");
-        vider(&PDT);
+        element x, y;
+        cf_initEl_pol(&x, F, P);
+        cf_initEl_pol(&y, F, Q);
+        element t;
+        cf_initEl_null(&t, F);
+        cf_mulEl(&t, &x, &y);
+        printf("Résultat : \n");
+        printf("Dans F,  x*y = "); cf_afficherp(&t.representation); printf("\n");
+        cf_viderEl(&x);
+        cf_viderEl(&y);
+        cf_viderEl(&t);
     }
 
-    else if(choix_test == 11)
-    {
-        polynome P_inv = inverse(P, p, f);
-        printf("L'inverse de P dans F_%d est : ", q); afficher(&P_inv); printf("\n");
-        vider(&P_inv);
+    else if(choix_test == 11){
+        element x;
+        cf_initEl_pol(&x, F, P);
+        element t;
+        cf_initEl_null(&t, F);
+        cf_invEl(&t, &x);
+        printf("Résultat : \n");
+        printf("L'inverse de x dans F est: x^-1 = "); cf_afficherp(&t.representation); printf("\n");
+        cf_viderEl(&x); cf_viderEl(&t);
     }
 
     else if(choix_test == 12){
-        polynome D = division(P, Q, p, f);
-        printf("Dans F_%d,  P/Q = ", q); afficher(&D); printf("\n");
-        vider(&D);
+        element x, y, z;
+        cf_initEl_pol(&x, F, P);
+        cf_initEl_pol(&y, F, Q);
+        cf_initEl_null(&z, F);
+        cf_divEl(&z, &x, &y);
+        printf("Résultat : \n");
+        printf("Dans F,  x/y = "); cf_afficherp(&z.representation); printf("\n");
+        cf_viderEl(&x); cf_viderEl(&y); cf_viderEl(&z);
     }
 
     else if(choix_test == 13){
-        int ord = ordre(P, p, f);
-        printf("Dans F_%d, l'ordre de P est : %d \n", q, ord);
+        element x; 
+        cf_initEl_pol(&x, F, P);
+        int ordre = cf_ordreEl(&x);
+        printf("Résultat : \n");
+        printf("Dans F, l'ordre de P est: %d \n", ordre);
     }
 
     else if(choix_test == 14){
-        int v = verif_generateur(P, p, f);
+        element x;
+        cf_initEl_pol(&x, F, P);
+        int v = cf_verifgenEl(&x);
+        printf("Résultat : \n");
         if(v == 0){
-            printf("P n'est pas générateur de F_%d \n", q);
+            printf("x n'est pas générateur de F \n");
         }
         else {
-            printf("P est un élément générateur de F_%d \n", q);
+            printf("x est un élément générateur de F \n");
         }
-    } */
+        cf_viderEl(&x);
+    }
 }
