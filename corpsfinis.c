@@ -709,14 +709,15 @@ int cf_bezoutp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
     cf_initp_monome(&u1, 0, 0);
     cf_initp_monome(&v0, 0, 0);
     cf_initp_monome(&v1, 1, 0);
-
     cf_divp_mod(&r2, &r0, &r1, p, 1);   // r2 = r0 - r1*q
     polynome q;
+    cf_initp_polynull(&q);
     cf_divp_mod(&q, &r0, &r1, p, 0);
-    
+
+    cf_initp_polynull(&u2);
+    cf_initp_polynull(&v2);
     cf_diffetnd_mod(&u2, &u0, &q, &u1, p);
     cf_diffetnd_mod(&v2, &v0, &q, &v1, p);
-
     while ( r2.degre != -1 ){
         cf_flipp(&r0, &r1, &r2);
         cf_divp_mod(&r2, &r0, &r1, p, 1);
