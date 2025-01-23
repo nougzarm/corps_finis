@@ -94,7 +94,7 @@ int cf_initp_copie(polynome* P, polynome* Q){
         return 1;   // Q n'est pas correctement défini
     }
     else if(Q->degre == -1){
-        init_polynull(P);
+        cf_init_polynull(P);
         return 0;   // P <- 0
     }
     else{
@@ -115,7 +115,7 @@ int cf_initp_monome(polynome* P, int coeff, int exp){
         free(P->coeff);
     }
     if(coeff == 0){
-        initp_polynull(P);
+        cf_initp_polynull(P);
         return 0;   // P <- 0
     }
     else{
@@ -270,7 +270,7 @@ int cf_cdp(polynome* P){
 }
 
 void cf_mulp_int(polynome* P, polynome* A, int n){
-    initp_polynull(P);
+    cf_initp_polynull(P);
     if (n == 0 || A->degre == -1){
         return 0;
     }
@@ -288,7 +288,7 @@ void cf_mulp_int_tr(polynome* P, int n){
     if (P->degre == -1)
         return ; // P est nul
     if (n == 0){
-        initp_polynull(P);
+        cf_initp_polynull(P);
         return 0;
     }
     else {
@@ -300,7 +300,7 @@ void cf_mulp_int_tr(polynome* P, int n){
 }
 
 int cf_addp(polynome* P, polynome* A, polynome* B){
-    initp_polynull(P);
+    cf_initp_polynull(P);
     if (A->degre != B->degre){
         P->degre = max(A->degre, B->degre);
         P->coeff = calloc(P->degre + 1, sizeof(int));
@@ -396,7 +396,7 @@ int cf_addp_tr(polynome* P, polynome* A){
 }
 
 int cf_opposep(polynome* P, polynome* A){
-    initp_polynull(P);
+    cf_initp_polynull(P);
     if(A->degre == -1){
         return 0;
     }
@@ -419,11 +419,11 @@ int cf_opposep_tr(polynome* P){
 }
 
 int cf_subp(polynome* P, polynome* A, polynome* B){
-    initp_polynull(P);
+    cf_initp_polynull(P);
     polynome T;
     cf_opposep(&T, B);
     cf_addp(P, A, &T);
-    vider(&T);
+    cf_viderp(&T);
     return 0;
 }
 
@@ -431,12 +431,12 @@ int cf_subp_tr(polynome* P, polynome* A){
     polynome T;
     cf_opposep(&T, A);
     cf_addp_tr(P, &T);
-    vider(&T);
+    cf_viderp(&T);
     return 0;
 }
 
 int cf_mulp(polynome* P, polynome* A, polynome* B){
-    initp_polynull(P);
+    cf_initp_polynull(P);
     if ( (A->degre == -1) || (B->degre == -1) ){
         return 0;
     }
@@ -459,14 +459,14 @@ int cf_mulp(polynome* P, polynome* A, polynome* B){
 
 int cf_mulp_tr(polynome* P, polynome* A){
     if ( (P->degre == -1) || (A->degre == -1) ){
-        initp_polynull(P);
+        cf_initp_polynull(P);
         return 0;
     }
     else {
         polynome T;
         cf_copie(&T, P);
         cf_mulp(P, &T, A);
-        vider(&T);
+        cf_viderp(&T);
         return 0;
     }
 }
@@ -480,29 +480,29 @@ int cf_diffetnd(polynome* P, polynome* A, polynome* Q, polynome* B){
 }
 
 int cf_puissancep(polynome* P, polynome* A, int exp){
-    initp_polynull(P);
+    cf_initp_polynull(P);
     if (exp == 0){
-        initp_monome(P, 1, 0);
+        cf_initp_monome(P, 1, 0);
         return 0;
     }
     else if (exp == 1){
-        initp_copie(P, A);
+        cf_initp_copie(P, A);
         return 0;
     }
     else {
-        initp_copie(P, A);
+        cf_initp_copie(P, A);
         polynome T;
         for (int i = 2; i<=exp; i++){
             cf_mulp(&T, P, A);
-            initp_copie(P, &T);
+            cf_initp_copie(P, &T);
         }
-        viderp(&T);
+        cf_viderp(&T);
         return 0;
     }
 }
 
 int cf_redp_int(polynome* P, polynome* A, int p){
-    initp_polynull(P);
+    cf_initp_polynull(P);
     for (int i = A->degre; i >= 0; i--){
         if ( (A->degre)%p != 0 ){
             P->degre = i;
@@ -533,7 +533,7 @@ int cf_redp_int_tr(polynome* P, int p){
         }
     }
     if ( d == -1 ){
-        initp_polynull(P);
+        cf_initp_polynull(P);
         return 0;
     }
     P->degre = d;
