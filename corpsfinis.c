@@ -4,7 +4,7 @@
     @nougzarm
     
     Sommaire:
-        (1. Structures -voir .h)
+        (1. Structures - voir .h)
         2. Outils nombres entiers
         3. Initialisation de polynomes
         4. Gestion de polynomes
