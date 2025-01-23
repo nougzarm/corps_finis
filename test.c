@@ -25,35 +25,48 @@ int main() {
 
     //  CONFIGURATION ----------------------------------------------------------------
     int p = 3;
-    int A[] = {1, 0, 6, 5, 1, 0};   //  polynome P   (Placer le coeff dominant en début de liste)
-    int B[] = {2, 2, 1, 0, 1};      //  polynome Q   
+    int A[] = {0, 1, 5, 6, 0, 1};   //  polynome P   (Placer le coeff dominant en fin de liste)
+    int B[] = {1, 0, 1, 2, 2};      //  polynome Q   
     int C[] = {1, 0, 1};            //  polynome f   (Irréductible dans F_p[X])
+    int a = sizeof(A)/sizeof(int); 
+    int b = sizeof(B)/sizeof(int); 
+    int c = sizeof(C)/sizeof(int);
 
     //  Initialisation des polynomes -------------------------------------------------
-    int a = sizeof(A)/sizeof(int); int b = sizeof(B)/sizeof(int); int c = sizeof(C)/sizeof(int);
-    polynome P = polynome_init(A, a); polynome Q = polynome_init(B, b); polynome f = polynome_init(C, c);
+    polynome P, Q, f;
+    cf_initp_liste(&P, A, a);
+    cf_initp_liste(&Q, B, b);
+    cf_initp_liste(&f, C, c);
+
+    //  Initialisation du corps F_p[X]/(f)
+    corpsfini F;
+    cf_initcf_pol(&F, p, &f);
+
+    //  Initialisation des éléments de F
+
 
     //  Affichage et déroulement du test ---------------------------------------------
     printf("----------------------------------------------------------------- \n");
     printf("Définitions :\n - Premier p = %d \n", p);
-    printf(" - Polynome irréductible dans F_%d[X] : f = ", p); afficher(&f); 
-    printf("\n - P = "); afficher(&P);
-    printf("\n - Q = "); afficher(&Q); printf("\n\n");
+    printf(" - Polynome irréductible dans F_%d[X] : f = ", p); cf_afficherp(&f); 
+    printf("\n - P = "); cf_afficherp(&P);
+    printf("\n - Q = "); cf_afficherp(&Q); printf("\n\n");
     
     test(choix_test, &P, &Q, p, &f); 
     printf("----------------------------------------------------------------- \n");
 
     //  Libération de la mémoire -----------------------------------------------------
-    vider(&P);
-    vider(&Q);
-    vider(&f);
+    cf_viderp(&P);
+    cf_viderp(&Q);
+    cf_viderp(&f);
+
+    cf_vidercf(&F);
 }
 
 
 
 void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f){
-    int q = puissance(p, f->degre);
-
+/* 
     if(choix_test == 0){
         polynome S = addition(P, Q);
         printf("Dans Z[X],  P + Q = "); afficher(&S); printf("\n");
@@ -157,5 +170,5 @@ void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f){
         else {
             printf("P est un élément générateur de F_%d \n", q);
         }
-    }
+    } */
 }

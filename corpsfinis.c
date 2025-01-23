@@ -135,7 +135,7 @@ int cf_initp_monome(polynome* P, int coeff, int exp){
 }
 
 // Initialisation d'un polynôme à partir d'une liste contenant les coefficients souhaités
-void cf_initp_polynome(polynome* P, int* coeff, int degre){
+void cf_initp_liste(polynome* P, int* coeff, int degre){
     if(degre < 0){
         return 1;   // Choisir un degré positif (ou utiliser initp_polynull pour degre = -1)
     }

@@ -65,22 +65,22 @@ int inverse_mod(int a, int p);
     |----------------------------------------------------------------------------------------------------------------|
 */
 /*  Initialisation d'un polynôme P à 0  */
-void initp_polynull(polynome* P);
+void cf_initp_polynull(polynome* P);
 
 /*  Initialisation d'un polynôme P à partir de Q   
     Retourne:   1 si l'initalisation a échoué (Q n'est pas correctement défini)
                 0 si la copie est réussie     */
-int initp_copie(polynome* P);
+int cf_initp_copie(polynome* P);
 
 /*  Initialisation d'un polynome P par le monomme coeff*X^exp
     Retourne:   1 si l'initalisation a échoué (exp n'est pas positif)
                 0 si l'initialisation   */
-int initp_monome(polynome* P, int coeff, int exp);
+int cf_initp_monome(polynome* P, int coeff, int exp);
 
 /*  Initialisation d'un polynome P à partir d'une liste de coefficients
     - La liste coefficient contient les coefficients (en commençant par le coefficient du degré constant)
     - Si degre = -1 alors P est initialisé à 0   */
-void initp_polynome(polynome* P, int* coeff, int degre);
+void cf_initp_liste(polynome* P, int* coeff, int degre);
 
 
 /*  |----------------------------------------------------------------------------------------------------------------|
