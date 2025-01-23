@@ -651,7 +651,7 @@ int cf_divp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
 
 int cf_pgcdp_mod(polynome* P, polynome* A, polynome* B, int p){
     if (B->degre > A->degre){
-        swap(A, B);
+        cf_swapp(A, B);
     }
     polynome r0;
     polynome r1;
@@ -693,7 +693,7 @@ int cf_bezoutp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
     cf_diffetnd_mod(&v2, &v0, &q, &v1, p);
 
     while ( r2.degre != -1 ){
-        flip(&r0, &r1, &r2);
+        cf_flipp(&r0, &r1, &r2);
         cf_divp_mod(&r2, &r0, &r1, p, 1);
         cf_divp_mod(&q, &r0, &r1, p, 0);
         cf_flipp(&u0, &u1, &u2);
