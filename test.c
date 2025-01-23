@@ -4,19 +4,19 @@
 
     0 : Affiche la somme de P et Q dans Z[X]
     1 : Affiche la différence P-Q dans Z[X]
-    2 : Affiche la somme de P et Q dans F_p[X]
-    3 : Affiche la réduction modulo p de P.   i.e  Z[X] ->> F_p[X] 
+    2 : Affiche la somme de P et Q dans Z/pZ[X]
+    3 : Affiche la réduction modulo p de P.   i.e  Z[X] ->> Z/pZ[X]
     4 : Affiche le produit de P et Q dans Z[X]
-    5 : Affiche le produit de P et Q dans F_p[X]
-    6 : Affiche la division euclidienne de P par Q dans F_p[X]
-    7 : Affiche le PGCD de P et Q (dans F_p[X])
-    8 : Affiche la formule de Bezout entre P et Q dans F_p[X]
-    9 : Affiche la réduction de P et Q dans F_q
+    5 : Affiche le produit de P et Q dans Z/pZ[X]
+    6 : Affiche la division euclidienne de P par Q dans Z/pZ[X]
+    7 : Affiche le PGCD de P et Q (dans Z/pZ[X])
+    8 : Affiche la formule de Bezout entre P et Q dans Z/pZ[X]
+    9 : Affiche x et y dans F
     10 : Affiche le produit de x et y dans F
     11 : Affiche l'inverse de x dans F
-    12 : Affiche le quotient de P par Q dans F_q
+    12 : Affiche le quotient de P par Q dans F
     13 : Affiche l'ordre de x dans F
-    14 : Affiche si P est générateur de F_q
+    14 : Affiche si P est générateur de F
 */
 
 int main() {
