@@ -991,39 +991,29 @@ int cf_divEl_tr(element* x, element* y){
     return 0;
 }
 
-int ordre(polynome* P, int p, polynome* f){
-    if (P->degre == -1) { return 0; }
-    if (P->degre == 0 && P->coeff[0] == 1) { return 1; }
-    int i = 2;
-    polynome PDT = copie(P);
-    polynome PDTT = multiplication_Fq(&PDT, P, p, f);
-    while (PDTT.degre != 0 || PDTT.coeff[0] !=1){
-        vider(&PDT);
-        PDT = copie(&PDTT);
-        vider(&PDTT);
-        PDTT = multiplication_Fq(&PDT, P, p, f);
-        i++;
+int cf_ordreEl(element* x){
+    if (x->representation.degre == -1){
+        return 0;
     }
-    return i;
+    else if (x->representation.degre == 0 && x->representation.coeff[0] == 1){
+        return 1;
+    }
+    int ord = 2;
+    element pdt;
+    cf_mulEl(&pdt, x, x);
+    while(pdt.representation.degre != 0 || pdt.representation.coeff[0] != 1){
+        cf_mulEl_tr(&pdt, x);
+        ord++;
+    }
+    return ord;
 }
 
-int verif_generateur(polynome* P, int p, polynome* f){
-    int i = ordre(P, p, f);
-    if (i == puissance(p, f->degre) - 1) {
+int cf_verifgenEl(element* x){
+    int ord = cf_ordreEl(x);
+    if (ord == cf_cardinalcf(x->corps) - 1){
         return 1;
     }
     else {
         return 0;
     }
 }
-
-
-
-
-
-
-
-
-
-
-

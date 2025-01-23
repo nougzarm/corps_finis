@@ -330,8 +330,13 @@ int cf_divEl(element* x, element* y, element* z);
                 1 si echec (p.ex y non inversible ou != corps)  */
 int cf_divEl_tr(element* x, element* y);
 
-int ordre(polynome* P, int p, polynome* f);                            // Ordre de P dans F_q
-int verif_generateur(polynome* P, int p, polynome* f);                 // Verifie si P est générateur de F_q*
+/*  Retourne l'ordre d'un élément x dans F  */
+int cf_ordreEl(element* x);
+
+/*  Vérifie si x est générateur de F* 
+    Retourne:   1 si x est générateur
+                0 sinon  */
+int cf_verifgenEl(element* x);
 
 
 #endif // CORPSFINI_INCLUDED
