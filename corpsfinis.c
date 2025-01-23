@@ -774,6 +774,23 @@ int cf_vidercf(corpsfini* F){
     return 0;
 }
 
+int cf_cardinalcf(corpsfini* F){
+    return puissance(F->car, F->relation.degre)
+}
+
+int cf_comparcf(corpsfini* F, corpsfini* K){
+    if (F->car != K->car){
+        return 0;
+    }
+    if (cf_comparp(&F->relation, &F->relation) == 0){
+        return 0;
+    }
+    else{
+        return 1;
+    }
+}
+
+
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
     |                            8. INITIALISATION/GESTION D'ELEMENTS DE CORPS FINIS                                 |
@@ -802,12 +819,14 @@ int cf_viderel(element* x){
 
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
-    |                            8. OPERATIONS DANS UN CORPS FINI F_q = F_p[X]/(f)                                   |
+    |                                      8. OPERATIONS DANS UN CORPS FINI F                                        |
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
-int cardinal(int p, polynome* f){
-    return puissance(p, f->degre);
+int cf_addel(element* x, element* y, element* z){
+    if (cf_comparcf(y->corps, z->corps) == 0){
+        return 1;   // y et z ne sont pas définis sur le même corps
+    }
 }
 
 polynome addition_Fq(polynome* A, polynome* B, int p, polynome* f){

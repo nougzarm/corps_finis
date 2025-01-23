@@ -241,6 +241,12 @@ int cf_initcf_int(corpsfini* F, int p);
 /*  Libération de la mémoire occupée par un corps fini F    */
 int cf_vidercf(corpsfini* F);
 
+/*  Retourne le cardinal d'un corps fini F  */
+int cf_cardinalcf(corpsfini* F);
+
+/*  Compare les corps finis F et K (retourne 1 si F=K, 0 sinon) */
+int cf_comparcf(corpsfini* F, corpsfini* K);
+
 /*  |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
     |                            8. INITIALISATION/GESTION D'ELEMENTS DE CORPS FINIS                                 |
@@ -264,7 +270,11 @@ int cf_viderel(element* x);
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
-int cardinal(int p, polynome* f);                                      // Renvoie q = card(F_q)
+/*  Stocker la somme y+z dans x 
+    Retourne:   0 si réussi
+                1 si echec (p.ex pas définis sur le même corps)*/
+int cf_addel(element* x, element* y, element* z);
+
 polynome addition_Fq(polynome*, polynome*, int p, polynome* f);        // Addition dans F_q
 polynome multiplication_Fq(polynome*, polynome*, int p, polynome* f);  // Multiplication dans F_q
 polynome puissance_Fq(polynome*, int exposant, int p, polynome* f);    // Puissance dans F_q
