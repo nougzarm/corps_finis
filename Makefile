@@ -17,5 +17,3 @@ corpsfinis.o: corpsfinis.c corpsfinis.h
 
 clean:
 	rm -f $(OBJS) test
-
-
