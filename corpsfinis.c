@@ -95,22 +95,12 @@ int cf_setp_polynull(polynome* P){
 }
 
 int cf_initp_copie(polynome* P, polynome* Q){
-    if(Q->degre < -1){
-        cf_initp_polynull(P);   // Valeur par défaut
-        return 1;   // Q n'est pas correctement défini
+    P->degre = Q->degre;
+    P->coeff = calloc(Q->degre+1, sizeof(int));
+    for(int i=0; i < Q->degre+1; i++){
+        P->coeff[i] = Q->coeff[i];
     }
-    else if(Q->degre == -1){
-        cf_setp_polynull(P);
-        return 0;   // P <- 0
-    }
-    else{
-        P->degre = Q->degre;
-        P->coeff = calloc(Q->degre+1, sizeof(int));
-        for(int i=0; i < Q->degre+1; i++){
-            P->coeff[i] = Q->coeff[i];
-        }
-        return 0;   // P <- Q
-    }
+    return 0;   // P <- Q
 }
 
 int cf_setp_copie(polynome* P, polynome* Q){
@@ -121,23 +111,17 @@ int cf_setp_copie(polynome* P, polynome* Q){
 }
 
 int cf_initp_monome(polynome* P, int coeff, int exp){
-    if(exp < 0){
-        cf_initp_polynull(P);    // Valeur par défaut
-        return 1;   // Choisir un exposant positif
-    }
     if(coeff == 0){
         cf_initp_polynull(P);
-        return 0;   // P <- 0
+        return 0;
     }
-    else{
-        P->degre = exp;
-        P->coeff = calloc(exp + 1, sizeof(int));
-        for (int i = 0; i < exp; i++){
-            P->coeff[i] = 0;
-            }
-        P->coeff[exp] = coeff;
-        return 0;   // P <- coeff*X^exp
+    P->degre = exp;
+    P->coeff = calloc(exp + 1, sizeof(int));
+    for (int i = 0; i < exp; i++){
+        P->coeff[i] = 0;
     }
+    P->coeff[exp] = coeff;
+    return 0;   // P <- coeff*X^exp
 }
 
 int cf_setp_monome(polynome* P, int coeff, int exp){
@@ -149,10 +133,6 @@ int cf_setp_monome(polynome* P, int coeff, int exp){
 
 // Initialisation d'un polynôme à partir d'une liste contenant les coefficients souhaités
 int cf_initp_liste(polynome* P, int* coeff, int degre){
-    if(degre < 0){
-        cf_initp_polynull(P);   // Valeur par défaut
-        return 1;   // Choisir un degré positif (ou utiliser initp_polynull pour degre = -1)
-    }
     // Début de l'initialisation
     P->degre = degre;
     P->coeff = calloc(degre+1, sizeof(int));
@@ -177,6 +157,7 @@ int cf_setp_liste(polynome* P, int* coeff, int degre){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
+
 int cf_afficherp(polynome* P){
     if (P->degre == -1){
         printf("0");
@@ -215,15 +196,15 @@ void cf_viderp(polynome* P){
 void cf_swapp(polynome* P, polynome* Q){
     polynome T;
     cf_initp_copie(&T, P);
-    cf_initp_copie(P, Q);
-    cf_initp_copie(Q, &T);
+    cf_setp_copie(P, Q);
+    cf_setp_copie(Q, &T);
     cf_viderp(&T);
     return;
 }
 
 void cf_flipp(polynome* r0, polynome* r1, polynome* r2){
-    cf_initp_copie(r0, r1);
-    cf_initp_copie(r1, r2);
+    cf_setp_copie(r0, r1);
+    cf_setp_copie(r1, r2);
     cf_viderp(r2);
     return;
 }
@@ -505,20 +486,20 @@ int cf_diffetnd(polynome* P, polynome* A, polynome* Q, polynome* B){
 int cf_puissancep(polynome* P, polynome* A, int exp){
     cf_setp_polynull(P);
     if (exp == 0){
-        cf_initp_monome(P, 1, 0);
+        cf_setp_monome(P, 1, 0);
         return 0;
     }
     else if (exp == 1){
-        cf_initp_copie(P, A);
+        cf_setp_copie(P, A);
         return 0;
     }
     else {
-        cf_initp_copie(P, A);
+        cf_setp_copie(P, A);
         polynome T;
         cf_initp_polynull(&T);
         for (int i = 2; i<=exp; i++){
             cf_mulp(&T, P, A);
-            cf_initp_copie(P, &T);
+            cf_setp_copie(P, &T);
         }
         cf_viderp(&T);
         return 0;
@@ -634,7 +615,7 @@ int cf_puissancep_mod(polynome* P, polynome* A, int exp, int p){
         cf_initp_monome(P, 1, 0);
         return 0;
     }
-    cf_initp_copie(P, A);
+    cf_setp_copie(P, A);
     if(P->degre == -1){
         return 0;
     }
@@ -685,14 +666,14 @@ int cf_pgcdp_mod(polynome* P, polynome* A, polynome* B, int p){
     cf_initp_copie(&r1, B);
     int result = cf_divp_mod(&r2, &r0, &r1, p, 1);
     while ( r2.degre != -1 ){
-        cf_initp_copie(&r0, &r1);
-        cf_initp_copie(&r1, &r2);
+        cf_setp_copie(&r0, &r1);
+        cf_setp_copie(&r1, &r2);
         result = cf_divp_mod(&r2, &r0, &r1, p, 1);
     }
     cf_viderp(&r0); 
     cf_viderp(&r2);
     cf_unitp_mod(&r1, p);
-    cf_initp_copie(P, &r1);
+    cf_setp_copie(P, &r1);
     cf_viderp(&r1);
     return result;
 }
@@ -702,7 +683,8 @@ int cf_bezoutp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
     polynome r0, r1, r2;
     cf_initp_copie(&r0, A);
     cf_initp_copie(&r1, B);
-
+    cf_initp_polynull(&r2);
+    
     polynome u0, u1, u2;
     polynome v0, v1, v2;
     cf_initp_monome(&u0, 1, 0);
@@ -713,7 +695,6 @@ int cf_bezoutp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
     polynome q;
     cf_initp_polynull(&q);
     cf_divp_mod(&q, &r0, &r1, p, 0);
-
     cf_initp_polynull(&u2);
     cf_initp_polynull(&v2);
     cf_diffetnd_mod(&u2, &u0, &q, &u1, p);
@@ -737,7 +718,7 @@ int cf_bezoutp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
         cf_viderp(&v1);
         cf_mulp_int_tr(&u1, C_inv);
         cf_redp_int_tr(&u1, p);
-        cf_initp_copie(P, &u1);
+        cf_setp_copie(P, &u1);
         cf_viderp(&u1);
         return 0;
     }
@@ -745,7 +726,7 @@ int cf_bezoutp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
         cf_viderp(&u1);
         cf_mulp_int_tr(&v1, C_inv);
         cf_redp_int_tr(&v1, p);
-        cf_initp_copie(P, &v1);
+        cf_setp_copie(P, &v1);
         cf_viderp(&v1);
         return 0;
     }
@@ -761,7 +742,7 @@ int cf_redp_pol_tr(polynome* P, polynome* f, int p){
     cf_redp_int_tr(P, p);
     polynome T;
     cf_divp_mod(&T, P, f, p, 1);
-    cf_initp_copie(P, &T);
+    cf_setp_copie(P, &T);
     cf_viderp(&T);
     return 0;
 }
