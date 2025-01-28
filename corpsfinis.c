@@ -95,8 +95,11 @@ int cf_setp_polynull(polynome* P){
 }
 
 int cf_initp_copie(polynome* P, polynome* Q){
+    if(Q->degre == -1){
+        return cf_initp_polynull(P);
+    }
     P->degre = Q->degre;
-    P->coeff = calloc(Q->degre+1, sizeof(int));
+    P->coeff = (int*)calloc(Q->degre+1, sizeof(int));
     for(int i=0; i < Q->degre+1; i++){
         P->coeff[i] = Q->coeff[i];
     }
@@ -121,7 +124,7 @@ int cf_initp_monome(polynome* P, int coeff, int exp){
         P->coeff[i] = 0;
     }
     P->coeff[exp] = coeff;
-    return 0;   // P <- coeff*X^exp
+    return 0;
 }
 
 int cf_setp_monome(polynome* P, int coeff, int exp){
@@ -131,19 +134,16 @@ int cf_setp_monome(polynome* P, int coeff, int exp){
     return cf_initp_monome(P, coeff, exp);
 }
 
-// Initialisation d'un polynôme à partir d'une liste contenant les coefficients souhaités
 int cf_initp_liste(polynome* P, int* coeff, int degre){
-    // Début de l'initialisation
     P->degre = degre;
     P->coeff = calloc(degre+1, sizeof(int));
     for(int i = 0; i <= degre; i++){
         P->coeff[i] = coeff[i];
     }
-    return 0;   // Initialisation réussie
+    return 0;
 }
 
 int cf_setp_liste(polynome* P, int* coeff, int degre){
-    // Vider P si il est déjà initialisé
     if(P->coeff != NULL){
         free(P->coeff);
     }

@@ -71,29 +71,27 @@ int inverse_mod(int a, int p);
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
-/*  Remarque importante: suivant le cas où le polynome deja été utilisé ou non bien choisir entre initp et setp
-        initp : à utiliser lorsque le polynome n'a pas encore été initialisé
-        setp : à utiliser UNIQUEMENT lorsque le polynome a deja été initialisé via initp     */
+/*  Remarque importante: suivant le cas où le polynome a deja été (manuellement) initialisé ou non, il est
+        nécessaire de bien choisir entre initp et setp
+        initp : à utiliser pour initialiser un polynome (directement après une déclaration)
+        setp : à utiliser pour attribuer une valeur à un polynôme UNIQUEMENT lorsque le polynome a deja
+            été initialisé via initp     */
 
 /*  Initialisation d'un polynôme P à 0  */
 int cf_initp_polynull(polynome* P);
 int cf_setp_polynull(polynome* P);
 
-/*  Initialisation d'un polynôme P à partir de Q   
-    Retourne:   1 si l'initalisation a échoué (Q n'est pas correctement défini)
-                0 si la copie est réussie     */
+/*  Initialisation d'un polynôme P à partir d'une copie de Q     */
 int cf_initp_copie(polynome* P, polynome* Q);
 int cf_setp_copie(polynome* P, polynome* Q);
 
-/*  Initialisation d'un polynome P par le monomme coeff*X^exp
-    Retourne:   1 si l'initalisation a échoué (exp n'est pas positif)
-                0 si l'initialisation   */
+/*  Initialisation d'un polynome P par le monomme coeff*X^exp   */
 int cf_initp_monome(polynome* P, int coeff, int exp);
 int cf_setp_monome(polynome* P, int coeff, int exp);
 
 /*  Initialisation d'un polynome P à partir d'une liste de coefficients
-    - La liste coefficient contient les coefficients (en commençant par le coefficient du degré constant)
-    - Si degre = -1 alors P est initialisé à 0   */
+        - La liste coefficient contient les coefficients (en commençant par le coefficient du degré constant)
+        - Si degre = -1 alors P est initialisé à 0   */
 int cf_initp_liste(polynome* P, int* coeff, int degre);
 int cf_setp_liste(polynome* P, int* coeff, int degre);
 
