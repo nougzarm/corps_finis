@@ -25,11 +25,11 @@ int main() {
     int choix_test = -4;
 
     //  CONFIGURATION ----------------------------------------------------------------
-    int p = 3;
+    int p = 11;
     int exp = 2;
-    int A[] = {2, 0, 1};   //  polynome P   (Placer le coeff dominant en fin de liste)
-    int B[] = {1, 0, 1, 2, 2};      //  polynome Q   
-    int C[] = {1, 0, 1};            //  polynome f   (Irréductible dans F_p[X])
+    int A[] = {2};   //  polynome P   (Placer le coeff dominant en fin de liste)
+    int B[] = {7};      //  polynome Q   
+    int C[] = {0, 1};            //  polynome f   (Irréductible dans F_p[X])
     int a = sizeof(A)/sizeof(int)-1; 
     int b = sizeof(B)/sizeof(int)-1; 
     int c = sizeof(C)/sizeof(int)-1;

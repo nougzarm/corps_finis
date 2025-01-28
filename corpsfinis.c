@@ -163,10 +163,20 @@ void cf_affichermonome(int coeff, int exp){
         return;
     }
     if(coeff == 1){
-        printf("X^%d", exp);
+        if(coeff == 1){
+            printf("X");
+        }
+        else{
+            printf("X^%d", exp);
+        }
     }
     else{
-        printf("%dX^%d", coeff, exp);
+        if(coeff == 1){
+            printf("%dX", coeff);
+        }
+        else{
+            printf("%dX^%d", coeff, exp);
+        }
     }
     return;
 }
