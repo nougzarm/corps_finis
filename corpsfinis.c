@@ -186,11 +186,8 @@ int cf_afficherp(polynome* P){
     }
 }
 
-void cf_viderp(polynome* P){
-    if (P->coeff != NULL){
-        free(P->coeff);
-        cf_initp_polynull(P);
-    }
+int cf_viderp(polynome* P){
+    return cf_setp_polynull(P);
 }
 
 void cf_swapp(polynome* P, polynome* Q){

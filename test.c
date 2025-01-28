@@ -21,7 +21,7 @@
 
 int main() {
     //  CHOIX DU TEST À EFFECTUER ----------------------------------------------------
-    int choix_test = 14;
+    int choix_test = 11;
 
     //  CONFIGURATION ----------------------------------------------------------------
     int p = 3;
