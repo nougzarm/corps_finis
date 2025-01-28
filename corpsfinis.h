@@ -50,11 +50,18 @@ typedef struct{
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
-int max(int a, int b);          // max(a, b)
-int min(int a, int b);          // min(a, b)
-int modulo(int a, int b);       // a mod b
-int puissance(int a, int e);    // a^e
-int puissance_modulo(int m, int e, int p);  // m^e mod p
+/*  Fonctions max et min entre deux entiers  */
+int max(int a, int b);
+int min(int a, int b);
+
+/*  Retourne la réduction POSITIVE de a modulo b     */
+int modulo(int a, int b);
+
+/*  Fonctions exponentiations "optimisée" */
+int puissance(int a, int e);
+int puissance_modulo(int m, int e, int p);
+
+/*  Retourne l'inverse de a dans Z/pZ    */
 int inverse_mod(int a, int p);
 
 
