@@ -102,6 +102,9 @@ int cf_setp_liste(polynome* P, int* coeff, int degre);
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
+/*  Affiche le monome coeff*X^exp */
+void cf_affichermonome(int coeff, int exp);
+
 /*  Affichage d'un polynome P   */
 int cf_afficherp(polynome* P);
 

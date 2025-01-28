@@ -26,7 +26,7 @@ int main() {
 
     //  CONFIGURATION ----------------------------------------------------------------
     int p = 3;
-    int exp = 8;
+    int exp = 2;
     int A[] = {2, 0, 1};   //  polynome P   (Placer le coeff dominant en fin de liste)
     int B[] = {1, 0, 1, 2, 2};      //  polynome Q   
     int C[] = {1, 0, 1};            //  polynome f   (Irréductible dans F_p[X])
