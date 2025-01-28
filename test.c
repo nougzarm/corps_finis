@@ -7,6 +7,7 @@
     2 : Affiche la somme de P et Q dans Z/pZ[X]
     3 : Affiche la réduction modulo p de P.   i.e  Z[X] ->> Z/pZ[X]
     4 : Affiche le produit de P et Q dans Z[X]
+    -4 : Affiche la puissance P^exp dans Z[X]
     5 : Affiche le produit de P et Q dans Z/pZ[X]
     6 : Affiche la division euclidienne de P par Q dans Z/pZ[X]
     7 : Affiche le PGCD de P et Q (dans Z/pZ[X])
@@ -21,11 +22,12 @@
 
 int main() {
     //  CHOIX DU TEST À EFFECTUER ----------------------------------------------------
-    int choix_test = 11;
+    int choix_test = -4;
 
     //  CONFIGURATION ----------------------------------------------------------------
     int p = 3;
-    int A[] = {0, 1, 5, 6, 0, 1};   //  polynome P   (Placer le coeff dominant en fin de liste)
+    int exp = 8;
+    int A[] = {2, 0, 1};   //  polynome P   (Placer le coeff dominant en fin de liste)
     int B[] = {1, 0, 1, 2, 2};      //  polynome Q   
     int C[] = {1, 0, 1};            //  polynome f   (Irréductible dans F_p[X])
     int a = sizeof(A)/sizeof(int)-1; 
@@ -57,7 +59,7 @@ int main() {
     printf(" - Soit x (resp. y) l'image de P (resp. de Q) dans F");
     printf("\n\n");
 
-    test(choix_test, &P, &Q, p, &f, &F); 
+    test(choix_test, &P, &Q, p, &f, &F, exp); 
     printf("----------------------------------------------------------------- \n");
     //  Libération de la mémoire -----------------------------------------------------
     cf_viderp(&P);
@@ -71,7 +73,7 @@ int main() {
 
 
 
-void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f, corpsfini* F){
+void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f, corpsfini* F, int exp){
 
     if(choix_test == 0){
         polynome S;
@@ -109,6 +111,14 @@ void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f, corpsfin
         cf_initp_polynull(&T);  
         cf_mulp(&T, P, Q);
         printf("Dans Z[X],  P*Q = "); cf_afficherp(&T); printf("\n");
+        cf_viderp(&T);
+    }
+
+    else if(choix_test == -4){
+        polynome T;
+        cf_initp_polynull(&T);
+        cf_puissancep(&T, P, exp);
+        printf("Dans Z[X],  P^exp = "); cf_afficherp(&T); printf("\n");
         cf_viderp(&T);
     }
 
