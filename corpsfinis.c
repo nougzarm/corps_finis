@@ -157,6 +157,19 @@ int cf_setp_liste(polynome* P, int* coeff, int degre){
     |----------------------------------------------------------------------------------------------------------------|
     |----------------------------------------------------------------------------------------------------------------|
 */
+void cf_affichermonome(int coeff, int exp){
+    if(exp == 0){
+        printf("%d", coeff);
+        return;
+    }
+    if(coeff == 1){
+        printf("X^%d", exp);
+    }
+    else{
+        printf("%dX^%d", coeff, exp);
+    }
+    return;
+}
 
 int cf_afficherp(polynome* P){
     if (P->degre == -1){
@@ -164,22 +177,14 @@ int cf_afficherp(polynome* P){
         return 0;
     }
     else {
-        int coeff = P->coeff[P->degre];     // Coefficient dominant de P
         // Affichage du monôme dominant
-        if(coeff == 1){
-            printf("X^%d", P->degre);
-        }
-        else{
-            printf("%dX^%d", coeff, P->degre);
-        }
-        // Affichage des autres monômes
+        int coeff = P->coeff[P->degre];
+        cf_affichermonome(coeff, P->degre);
+        // Affichage du reste
         for (int i = 1; i <= P->degre; i++){
             coeff = P->coeff[P->degre - i]; 
-            if (coeff != 0 && coeff == 1){
-                printf(" + X^%d", P->degre - i);
-            }
-            else if(coeff != 0 && coeff != 1){
-                printf(" + %dX^%d", coeff, P->degre - i);
+            if (coeff != 0){
+                printf(" + "); cf_affichermonome(coeff, P->degre-i);
             }
         }
         return 0;
