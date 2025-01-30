@@ -22,14 +22,14 @@
 
 int main() {
     //  CHOIX DU TEST À EFFECTUER ----------------------------------------------------
-    int choix_test = -4;
+    int choix_test = 10;
 
     //  CONFIGURATION ----------------------------------------------------------------
     int p = 11;
-    int exp = 2;
-    int A[] = {2};   //  polynome P   (Placer le coeff dominant en fin de liste)
-    int B[] = {7};      //  polynome Q   
-    int C[] = {0, 1};            //  polynome f   (Irréductible dans F_p[X])
+    int exp = 2; 
+    int A[] = {3, 8};   //  polynome P   (Placer le coeff dominant en fin de liste)
+    int B[] = {8, 1};      //  polynome Q   
+    int C[] = {1, 0, 1};            //  polynome f   (Irréductible dans F_p[X])
     int a = sizeof(A)/sizeof(int)-1; 
     int b = sizeof(B)/sizeof(int)-1; 
     int c = sizeof(C)/sizeof(int)-1;
@@ -104,6 +104,7 @@ void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f, corpsfin
         cf_initp_polynull(&T);
         cf_redp_int(&T, P, p);
         printf("La réduction de P modulo %d vaut : ", p); cf_afficherp(&T); printf("\n");
+        cf_viderp(&T);
     }
  
     else if(choix_test == 4){

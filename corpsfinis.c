@@ -60,7 +60,7 @@ int puissance_modulo(int m, int e, int p){
 }
 
 int cf_inv_mod(int a, int p){
-    int r0 = p, r1 = a, r2 = r0%r1;
+    int r0 = p, r1 = modulo(a, p), r2 = modulo(r0, r1);
     int v0 = 0, v1 = 1, v2 = v0 - (r0/r1)*v1;
     while ( r2 != 0 ){
         r0 = r1;
@@ -99,7 +99,7 @@ int cf_initp_copie(polynome* P, polynome* Q){
         return cf_initp_polynull(P);
     }
     P->degre = Q->degre;
-    P->coeff = (int*)calloc(Q->degre+1, sizeof(int));
+    P->coeff = calloc(Q->degre+1, sizeof(int));
     for(int i=0; i < Q->degre+1; i++){
         P->coeff[i] = Q->coeff[i];
     }
@@ -163,7 +163,7 @@ void cf_affichermonome(int coeff, int exp){
         return;
     }
     if(coeff == 1){
-        if(coeff == 1){
+        if(exp == 1){
             printf("X");
         }
         else{
@@ -171,7 +171,7 @@ void cf_affichermonome(int coeff, int exp){
         }
     }
     else{
-        if(coeff == 1){
+        if(exp == 1){
             printf("%dX", coeff);
         }
         else{
@@ -413,12 +413,9 @@ int cf_opposep_tr(polynome* P){
 }
 
 int cf_subp(polynome* P, polynome* A, polynome* B){
-    cf_setp_polynull(P);
-    polynome T;
-    cf_initp_polynull(&T);
-    cf_opposep(&T, B);
-    cf_addp(P, A, &T);
-    cf_viderp(&T);
+    cf_setp_polynull(P);    // P <- 0
+    cf_opposep(P, B);       // P <- P-B
+    cf_addp_tr(P, A);       // P <- P+A
     return 0;
 }
 
@@ -487,12 +484,10 @@ int cf_mulp_tr(polynome* P, polynome* A){
 }
 
 int cf_diffetnd(polynome* P, polynome* A, polynome* Q, polynome* B){
-    cf_initp_polynull(P);
-    polynome T;
-    cf_initp_polynull(&T);
-    cf_mulp(&T, Q, B);
-    cf_subp(P, A, &T);
-    cf_viderp(&T);
+    cf_setp_polynull(P);   // P <- 0
+    cf_mulp(P, Q, B);       // P <- Q*B
+    cf_opposep_tr(P);       // P <- -P
+    cf_addp_tr(P, A);       // P <- P+A
     return 0;
 }
 
@@ -539,7 +534,7 @@ int cf_redp_int_tr(polynome* P, int p){
     if (P->degre == -1){
         return 0; 
     }
-    int d = -1;
+    int d = -1; // Recherche du nouveau degré
     for (int i = P->degre; i >= 0; i--){
         if ( (P->coeff[i])%p != 0 ){
             d = i;
@@ -551,10 +546,12 @@ int cf_redp_int_tr(polynome* P, int p){
         return 0;
     }
     P->degre = d;
-    P->coeff = realloc(P->coeff, (d+1)*sizeof(int));
+    int* coeff_temp = calloc(P->degre+1, sizeof(int)); 
     for (int i = 0; i <= P->degre; i++){
-        P->coeff[i] = modulo(P->coeff[i], p);
+        coeff_temp[i] = modulo(P->coeff[i], p);
     }
+    free(P->coeff);
+    P->coeff = coeff_temp;
     return 0;
 }
 
@@ -621,7 +618,7 @@ int cf_diffetnd_mod(polynome* P, polynome* A, polynome* Q, polynome* B, int p){
 
 int cf_puissancep_mod(polynome* P, polynome* A, int exp, int p){
     if(exp == 0){
-        cf_initp_monome(P, 1, 0);
+        cf_setp_monome(P, 1, 0);
         return 0;
     }
     cf_setp_copie(P, A);
@@ -636,29 +633,28 @@ int cf_puissancep_mod(polynome* P, polynome* A, int exp, int p){
 }
 
 int cf_divp_mod(polynome* P, polynome* A, polynome* B, int p, int i){
-    cf_redp_int_tr(A, p);
-    cf_redp_int_tr(B, p);
     polynome Q, M, R;
-    cf_initp_polynull(&Q);
-    cf_initp_polynull(&M);
-    cf_initp_copie(&R, A);
+    cf_initp_polynull(&Q);  // Q <- 0
+    cf_initp_polynull(&M);  // M <- 0
+    cf_initp_copie(&R, A);  // R <- A
+    cf_redp_int_tr(&R, p);  // R <- R mod p
     while ( R.degre >= B->degre ) {
-        cf_setp_monome(&M, R.coeff[R.degre] * cf_inv_mod(B->coeff[B->degre], p), R.degre - B->degre );
-        cf_addp_tr(&Q, &M);
-        cf_redp_int_tr(&Q, p);
-        cf_diffetnd_mod(&R, A, &Q, B, p);
+        cf_setp_monome(&M, R.coeff[R.degre] * cf_inv_mod(B->coeff[B->degre], p), R.degre - B->degre ); 
+        cf_addp_tr(&Q, &M);     // Q <- Q+M
+        cf_redp_int_tr(&Q, p);  // Q <- Q mod p
+        cf_diffetnd_mod(&R, A, &Q, B, p);   // R <- A-Q*B
     }
     if (i == 0){
-        cf_viderp(&R);
+        cf_viderp(&R);  
         cf_viderp(&M);
-        cf_initp_copie(P, &Q);
+        cf_setp_copie(P, &Q);
         cf_viderp(&Q);
         return 0;
     }
     else {
         cf_viderp(&Q);
         cf_viderp(&M);
-        cf_initp_copie(P, &R);
+        cf_setp_copie(P, &R);
         cf_viderp(&R);
         return 0;
     }
@@ -673,6 +669,7 @@ int cf_pgcdp_mod(polynome* P, polynome* A, polynome* B, int p){
     polynome r2;
     cf_initp_copie(&r0, A);
     cf_initp_copie(&r1, B);
+    cf_initp_polynull(&r2);
     int result = cf_divp_mod(&r2, &r0, &r1, p, 1);
     while ( r2.degre != -1 ){
         cf_setp_copie(&r0, &r1);
@@ -750,6 +747,7 @@ int cf_redp_pol(polynome* P, polynome* A, polynome* f, int p){
 int cf_redp_pol_tr(polynome* P, polynome* f, int p){
     cf_redp_int_tr(P, p);
     polynome T;
+    cf_initp_polynull(&T);
     cf_divp_mod(&T, P, f, p, 1);
     cf_setp_copie(P, &T);
     cf_viderp(&T);

@@ -8,3 +8,4 @@ Une façon de construire des corps finis :
   La librairie corps_finis contient les outils de base pour travailler dans les espaces des polynômes Z[X] et Z/pZ[X] ou encore dans les corps finis F_q.
 
   Le programme compilé via le fichier test propose quelques exemples d'opérations dans ces espaces.
+  
