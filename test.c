@@ -1,52 +1,70 @@
 #include "test.h"
 
-/* En fonction de la valeur de choix_test : 
+/*  |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|
+    |                       QUELQUES EXEMPLES DE TESTS DE LA LIBRAIRIE POLYNOMES/CORPS FINIS                         |
+    |----------------------------------------------------------------------------------------------------------------|
+    |----------------------------------------------------------------------------------------------------------------|
 
-    0 : Affiche la somme de P et Q dans Z[X]
-    1 : Affiche la différence P-Q dans Z[X]
-    2 : Affiche la somme de P et Q dans Z/pZ[X]
-    3 : Affiche la réduction modulo p de P.   i.e  Z[X] ->> Z/pZ[X]
-    4 : Affiche le produit de P et Q dans Z[X]
-    -4 : Affiche la puissance P^exp dans Z[X]
-    5 : Affiche le produit de P et Q dans Z/pZ[X]
-    6 : Affiche la division euclidienne de P par Q dans Z/pZ[X]
-    7 : Affiche le PGCD de P et Q (dans Z/pZ[X])
-    8 : Affiche la formule de Bezout entre P et Q dans Z/pZ[X]
-    9 : Affiche x et y dans F
-    10 : Affiche le produit de x et y dans F
-    11 : Affiche l'inverse de x dans F
-    12 : Affiche le quotient de P par Q dans F
-    13 : Affiche l'ordre de x dans F
-    14 : Affiche si P est générateur de F
+    Définitions:
+        - Polynomes P, Q dans Z[X]
+        - Corps fini F = F_p[X]/(f) avec: p un nombre premier et f irréductible dans F_p[X]     
+        
+    Exemples de tests (choisir avec l'entier 'choix_test'):
+        0 : Affiche la somme de P et Q dans Z[X]
+        1 : Affiche la différence P-Q dans Z[X]
+        2 : Affiche la somme de P et Q dans Z/pZ[X]
+        3 : Affiche la réduction modulo p de P.   i.e  Z[X] ->> Z/pZ[X]
+        4 : Affiche le produit de P et Q dans Z[X]
+        -4 : Affiche la puissance P^exp dans Z[X]
+        5 : Affiche le produit de P et Q dans Z/pZ[X]
+        6 : Affiche la division euclidienne de P par Q dans Z/pZ[X]
+        7 : Affiche le PGCD de P et Q (dans Z/pZ[X])
+        8 : Affiche la formule de Bezout entre P et Q dans Z/pZ[X]
+        9 : Affiche x et y dans F
+        10 : Affiche le produit de x et y dans F
+        11 : Affiche l'inverse de x dans F
+        12 : Affiche le quotient de P par Q dans F
+        13 : Affiche l'ordre de x dans F
+        14 : Affiche si P est générateur de F
 */
 
 int main() {
-    //  CHOIX DU TEST À EFFECTUER ----------------------------------------------------
+/*  |----------------------------------------------------------------------------------------------------------------|
+    |                                                CONFIGURATION                                                   |
+    |----------------------------------------------------------------------------------------------------------------|
+*/
+    /*  Choix du test    */
     int choix_test = 13;
-    //  CONFIGURATION ----------------------------------------------------------------
+
+    /*  Polynôme P resp. Q (liste A resp. B)
+        Remarque : Placer les monômes dans l'ordre croissant de degré    */
+    int A[] = {3, 8, 7, 9, 1, 1};
+    int B[] = {5, 6};
+    int exp = 2;
+
+    /*  Corps fini F (Définir f via la liste C)    */
     int p = 11;
-    int exp = 2; 
-    int A[] = {3, 8, 7, 9, 1, 1};   //  polynome P   (Placer le coeff dominant en fin de liste)
-    int B[] = {5, 6};      //  polynome Q   
-    int C[] = {1, 0, 1};            //  polynome f   (Irréductible dans F_p[X])
+    int C[] = {1, 0, 1};
+
+    /*  Initialisation des polynômes  */
+    polynome P, Q, f;
     int a = sizeof(A)/sizeof(int)-1; 
     int b = sizeof(B)/sizeof(int)-1; 
     int c = sizeof(C)/sizeof(int)-1;
-
-    //  Initialisation des polynomes -------------------------------------------------
-    polynome P, Q, f;
-
     cf_initp_liste(&P, A, a);
     cf_initp_liste(&Q, B, b);
     cf_initp_liste(&f, C, c);
 
-    //  Initialisation du corps F_p[X]/(f)
+    /*  Initialisation du corps F */
     corpsfini F;
     int r0 = cf_initcf_pol(&F, p, &f);
-    //  Initialisation des éléments de F
 
 
-    //  Affichage et déroulement du test ---------------------------------------------
+/*  |----------------------------------------------------------------------------------------------------------------|
+    |                                               TEST ET AFFICHAGE                                                |
+    |----------------------------------------------------------------------------------------------------------------|
+*/
     printf("----------------------------------------------------------------- \n");
     printf("Définitions :");
     printf("\n - P = "); cf_afficherp(&P);
@@ -60,16 +78,19 @@ int main() {
 
     test(choix_test, &P, &Q, p, &f, &F, exp); 
     printf("----------------------------------------------------------------- \n");
-    //  Libération de la mémoire -----------------------------------------------------
+
+
+/*  |----------------------------------------------------------------------------------------------------------------|
+    |                                          LIBERATION DE LA MEMOIRE                                              |
+    |----------------------------------------------------------------------------------------------------------------|
+*/
     cf_viderp(&P);
     cf_viderp(&Q);
     cf_viderp(&f);
-
     if(r0 == 0){
         cf_vidercf(&F); // Cas où F a été initialisé
     }
 }
-
 
 
 void test(int choix_test, polynome* P, polynome* Q, int p, polynome* f, corpsfini* F, int exp){
