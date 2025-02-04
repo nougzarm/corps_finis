@@ -240,18 +240,7 @@ int cf_comparp_X(polynome* P){
     else if (P->coeff[0] == 0 && P->coeff[1] == 1){
         return 1;
     }
-    else {
-        return 0;
-    }
-}
-
-int cf_cdp(polynome* P){
-    if (P->degre == -1){
-        return 0;
-    }
-    else {
-        return P->coeff[P->degre];
-    }
+    return 0;
 }
 
 int cf_mulp_int(polynome* P, polynome* A, int n){

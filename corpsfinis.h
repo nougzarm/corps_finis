@@ -57,9 +57,8 @@ int min(int a, int b);
 /*  Retourne la réduction POSITIVE de a modulo b     */
 int modulo(int a, int b);
 
-/*  Fonctions exponentiations "optimisée" */
+/*  Fonction exponentiation "optimisée" */
 int puissance(int a, int e);
-int puissance_modulo(int m, int e, int p);
 
 /*  Retourne l'inverse de a dans Z/pZ    */
 int inverse_mod(int a, int p);
@@ -130,9 +129,6 @@ int cf_comparp(polynome* P, polynome* A);
 
 /*  Compare P au monome X (Retourne 1 si P=X et 0 sinon)    */
 int cf_comparp_X(polynome* P);
-
-/*  Retourne le coefficient dominant d'un polynome P    */
-int cf_cdp(polynome* P);
 
 /*  Stocker le produit nA dans P (pour le cas A=P voir cf_mulp_int_tr)    */
 int cf_mulp_int(polynome* P, polynome* A, int n);
