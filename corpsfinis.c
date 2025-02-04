@@ -110,7 +110,7 @@ int cf_initp_monome(polynome* P, int coeff, int exp){
         return cf_initp_polynull(P);
     }
     P->degre = exp;
-    P->coeff = calloc(exp + 1, sizeof(int));
+    P->coeff = calloc(P->degre + 1, sizeof(int));
     for (int i = 0; i < exp; i++){
         P->coeff[i] = 0;
     }
