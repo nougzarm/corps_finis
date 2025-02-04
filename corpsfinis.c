@@ -107,8 +107,7 @@ int cf_setp_copie(polynome* P, polynome* Q){
 
 int cf_initp_monome(polynome* P, int coeff, int exp){
     if(coeff == 0){
-        cf_initp_polynull(P);
-        return 0;
+        return cf_initp_polynull(P);
     }
     P->degre = exp;
     P->coeff = calloc(exp + 1, sizeof(int));
