@@ -95,7 +95,7 @@ int cf_initp_copie(polynome* P, polynome* Q){
     for(int i=0; i < Q->degre+1; i++){
         P->coeff[i] = Q->coeff[i];
     }
-    return 0;   // P <- Q
+    return 0;
 }
 
 int cf_setp_copie(polynome* P, polynome* Q){
