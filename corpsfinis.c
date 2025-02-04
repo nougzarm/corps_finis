@@ -127,7 +127,7 @@ int cf_setp_monome(polynome* P, int coeff, int exp){
 
 int cf_initp_liste(polynome* P, int* coeff, int degre){
     P->degre = degre;
-    P->coeff = calloc(degre+1, sizeof(int));
+    P->coeff = calloc(P->degre + 1, sizeof(int));
     for(int i = 0; i <= degre; i++){
         P->coeff[i] = coeff[i];
     }
