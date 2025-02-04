@@ -51,14 +51,6 @@ int puissance(int m, int e){
     }
 }
 
-int puissance_modulo(int m, int e, int p){
-    int result = 1;
-    for (int i = 1; i <= e; i++){
-        result = modulo(result, p)*m;
-    }
-    return modulo(result, p);
-}
-
 int cf_inv_mod(int a, int p){
     int r0 = p, r1 = modulo(a, p), r2 = modulo(r0, r1);
     int v0 = 0, v1 = 1, v2 = v0 - (r0/r1)*v1;
